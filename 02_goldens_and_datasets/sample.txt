@@ -1,0 +1,18 @@
+python3 load_goldens.py
+cd .. |. git status | git add .
+git commit -m "?"
+git push
+
+goldens.json is your test data file.
+A golden is one example of expected AI behaviour.
+id: unique test case ID
+input: user question/prompt
+expected_output: what kind of answer we expect
+expected_tools: which tool the AI agent should call
+tags: category/grouping for the test
+
+load_goldens.py -
+This Python file reads the goldens.json file and prints the test cases.
+We are not evaluating with DeepEval yet.
+We are first proving that our golden dataset can be loaded properly.
+This is like preparing test data before running automation.
