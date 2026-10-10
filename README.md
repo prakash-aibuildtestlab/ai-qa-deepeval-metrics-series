@@ -29,9 +29,7 @@ AI QA is different because LLM outputs can vary, even for the same input. So ins
 | 03 | Answer Relevancy | Does the answer address the question? |
 | 04 | Faithfulness | Is the answer grounded in context? |
 | 05 | Tool Correctness | Did the agent call the correct tool? |
-......
-......
-......
+
 
 ## Status
 
