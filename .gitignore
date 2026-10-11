@@ -218,3 +218,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# env
+.env
+*.env
+.venv/
+.venv
+notes.txt.deepeval/
+**/.deepeval/
