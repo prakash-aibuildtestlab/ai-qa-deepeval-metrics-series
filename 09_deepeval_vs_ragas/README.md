@@ -1,78 +1,89 @@
-# DeepEval vs RAGAS: RAG Metric Comparison
+# DeepEval vs RAGAS: Same RAG, Different Evaluation
 
-This example compares five RAG evaluation concepts previously tested with DeepEval against their native RAGAS equivalents.
+This example compares DeepEval and RAGAS by evaluating the exact same output from a real RAG pipeline.
 
-The purpose is not to prove that one framework is better. It is to understand how different evaluation frameworks test similar RAG quality dimensions.
+The RAG pipeline runs only once. Its question, generated answer, expected answer and retrieved documents are stored in one shared evaluation record.
 
-## Metrics covered
+That identical record is then passed to both frameworks.
 
-| Evaluation goal | DeepEval | RAGAS |
-|---|---|---|
-| Did the response address the question? | Answer Relevancy | Answer Relevancy |
-| Was the response grounded in the context? | Faithfulness | Faithfulness |
-| Were the retrieved documents relevant? | Contextual Relevancy | Context Relevance |
-| Were relevant documents ranked higher? | Contextual Precision | Context Precision |
-| Did retrieval include all required information? | Contextual Recall | Context Recall |
+## Why use one shared RAG record?
 
-## Business scenario
+Running the RAG pipeline separately for each framework could produce different answers or retrieve different documents.
 
-**Question:**
+That would make the comparison unreliable.
 
-> Can I cancel my order after it has been shipped, and how will my refund be processed?
+The comparison flow is:
 
-The test data includes:
+```text
+User Question
+      ↓
+Real RAG Pipeline
+      ↓
+One Shared Evaluation Record
+      ↓
+ ┌───────────────┬───────────────┐
+ │   DeepEval    │     RAGAS     │
+ │   Evaluator   │   Evaluator   │
+ └───────────────┴───────────────┘
+      ↓                 ↓
+        Compare Results
 
-- A correct response
-- A hallucinated response
-- Relevant retrieved contexts
-- Poorly ranked contexts
-- Incomplete retrieved contexts
+09_deepeval_vs_ragas/
+├── rag_agent.py
+├── deepeval_evaluator.py
+├── ragas_evaluator.py
+├── compare_deepeval_ragas.py
+├── test_ragas_metrics.py
+└── README.md
 
-These controlled scenarios help us identify which part of the RAG pipeline is failing.
+Business scenario
+User question
+Can I cancel my order after it has been shipped, and how will my refund be processed?
 
-## Results
+Retrieved context
+1. Once an order has been dispatched, it cannot be cancelled. The customer may refuse delivery or return the item after receiving it.
+2. After the returned item is received and inspected, the refund is issued to the original payment method within 5 to 7 business days.
+RAG-generated answer
+Once an order has been dispatched, it cannot be cancelled. You may refuse delivery or return the item after receiving it. After the returned item is received and inspected, the refund will be issued to the original payment method within 5 to 7 business days.
 
-Threshold: `0.70`
+Metrics compared
+Evaluation goal	DeepEval	RAGAS
+Did the answer address the question?	Answer Relevancy	Answer Relevancy
+Was the answer supported by the context?	Faithfulness	Faithfulness
+Were the retrieved documents relevant?	Contextual Relevancy	Context Relevance
+Were relevant documents ranked correctly?	Contextual Precision	Context Precision
+Did retrieval contain all required information?	Contextual Recall	Context Recall
 
-| RAGAS metric | Score | Result |
-|---|---:|---|
-| Answer Relevancy | 0.73 | PASS |
-| Faithfulness | 0.00 | FAIL |
-| Context Relevance | 1.00 | PASS |
-| Context Precision | 0.33 | FAIL |
-| Context Recall | 0.67 | FAIL |
 
-## What the results tell us
+Comparison results
+Threshold: 0.70
+Metric	DeepEval	RAGAS	Comparison
+Answer Relevancy	1.00 PASS	0.72 PASS	Same outcome, different score
+Faithfulness	1.00 PASS	1.00 PASS	Complete agreement
+Context Relevance	0.67 FAIL	1.00 PASS	Framework disagreement
+Context Precision	1.00 PASS	1.00 PASS	Complete agreement
+Context Recall	1.00 PASS	1.00 PASS	Complete agreement
 
-### Answer Relevancy — PASS
 
-The response addressed both the cancellation and refund questions.
+Important finding
+Both frameworks evaluated the exact same RAG evidence, but they did not produce identical scores.
+The largest difference occurred in Context Relevance:
+DeepEval: 0.67 — FAIL
+RAGAS:    1.00 — PASS
 
-### Faithfulness — FAIL
+The retrieved context contained both the cancellation and refund policies.
+However, DeepEval’s LLM judge interpreted the contextual coverage differently, while RAGAS considered the complete context relevant.
+Answer Relevancy also differed:
+DeepEval: 1.00 — PASS
+RAGAS:    0.72 — PASS
 
-The test response claimed that the order could be cancelled after shipment and that the refund would be issued as store credit within 24 hours.
-
-Both claims contradicted the retrieved policies.
-
-### Context Relevance — PASS
-
-The cancellation and refund documents were directly related to the user’s question.
-
-### Context Precision — FAIL
-
-Irrelevant documents were placed before the useful cancellation and refund documents.
-
-This shows that retrieving the correct documents is not enough. Their ranking also matters.
-
-### Context Recall — FAIL
-
-The retrieved context included the cancellation policy but omitted the refund-processing policy.
-
-The expected answer contained approximately three required claims, while the retrieved context supported only two, producing a score of `0.67`.
-
-## How to run
-
-Activate the shared virtual environment from the repository root:
-
-```bash
-source .venv/bin/activate
+Both frameworks passed the response, but the numerical scores were significantly different.
+Why can the scores differ?
+The frameworks may use different:
+- Evaluation prompts
+- Scoring formulas
+- Claim-decomposition methods
+- Embedding calculations
+- LLM-judge instructions
+- Definitions of relevance
+Similar metric names do not guarantee identical evaluation behaviour.
