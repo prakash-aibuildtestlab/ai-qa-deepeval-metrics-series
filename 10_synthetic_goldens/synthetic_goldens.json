@@ -1,0 +1,62 @@
+[
+  {
+    "id": "SYNTHETIC_001",
+    "input": "Imagine a traveler needing to cancel a booking just 24 hours before check-in. What fees might they face under the hotel's policy?",
+    "expected_output": "If a traveler cancels a booking just 24 hours before check-in, they will incur a fee equal to the first night's accommodation, as cancellations made within 48 hours of check-in are subject to this charge.",
+    "context": [
+      "Hotel Booking and Cancellation Policy\n\nGuests may cancel a standard room booking without charge up to 48 hours before check-in.\n\nCancellations made within 48 hours of check-in will incur a fee equal to the first night's accommodation.\n\nNon-refundable bookings cannot be cancelled or refunded unless required by Australian Consumer Law.\n\nGuests may change their booking dates once without an administration fee, provided the request is made at least 72 hours before check-in.\n\nRefunds for eligible cancellations are returned to the original payment method within 5 to 7 business days.\n\nGuests must provide their booking reference and the email address used for the reservation when requesting a cancellation.\n\nThe hotel must not disclose booking details to anyone who cannot verify the booking reference and registered email address."
+    ],
+    "source_file": "hotel_booking_policy.txt",
+    "review_status": "pending_human_review"
+  },
+  {
+    "id": "SYNTHETIC_002",
+    "input": "Imagine a scenario where a guest cancels a booking just 24 hours before check-in. What challenges might arise regarding cancellation fees?",
+    "expected_output": "If a guest cancels a booking just 24 hours before check-in, they will incur a cancellation fee equal to the first night's accommodation, as cancellations made within 48 hours of check-in are subject to this charge. Additionally, if the booking was non-refundable, the guest would not be able to cancel or receive a refund unless required by Australian Consumer Law.",
+    "context": [
+      "Hotel Booking and Cancellation Policy\n\nGuests may cancel a standard room booking without charge up to 48 hours before check-in.\n\nCancellations made within 48 hours of check-in will incur a fee equal to the first night's accommodation.\n\nNon-refundable bookings cannot be cancelled or refunded unless required by Australian Consumer Law.\n\nGuests may change their booking dates once without an administration fee, provided the request is made at least 72 hours before check-in.\n\nRefunds for eligible cancellations are returned to the original payment method within 5 to 7 business days.\n\nGuests must provide their booking reference and the email address used for the reservation when requesting a cancellation.\n\nThe hotel must not disclose booking details to anyone who cannot verify the booking reference and registered email address."
+    ],
+    "source_file": "hotel_booking_policy.txt",
+    "review_status": "pending_human_review"
+  },
+  {
+    "id": "SYNTHETIC_003",
+    "input": "What are the financial implications of last-minute booking cancellations under hotel policies?",
+    "expected_output": "Last-minute cancellations made within 48 hours of check-in will incur a fee equal to the first night's accommodation. Non-refundable bookings cannot be cancelled or refunded unless required by Australian Consumer Law.",
+    "context": [
+      "Hotel Booking and Cancellation Policy\n\nGuests may cancel a standard room booking without charge up to 48 hours before check-in.\n\nCancellations made within 48 hours of check-in will incur a fee equal to the first night's accommodation.\n\nNon-refundable bookings cannot be cancelled or refunded unless required by Australian Consumer Law.\n\nGuests may change their booking dates once without an administration fee, provided the request is made at least 72 hours before check-in.\n\nRefunds for eligible cancellations are returned to the original payment method within 5 to 7 business days.\n\nGuests must provide their booking reference and the email address used for the reservation when requesting a cancellation.\n\nThe hotel must not disclose booking details to anyone who cannot verify the booking reference and registered email address."
+    ],
+    "source_file": "hotel_booking_policy.txt",
+    "review_status": "pending_human_review"
+  },
+  {
+    "id": "SYNTHETIC_004",
+    "input": "Imagine needing to change your booking dates last minute. How would the hotel's policy affect your options?",
+    "expected_output": "If you need to change your booking dates last minute, the hotel's policy allows you to make one change without an administration fee, but this request must be made at least 72 hours before check-in. If you attempt to change your booking within this timeframe, you may not be able to do so without incurring additional fees.",
+    "context": [
+      "Hotel Booking and Cancellation Policy\n\nGuests may cancel a standard room booking without charge up to 48 hours before check-in.\n\nCancellations made within 48 hours of check-in will incur a fee equal to the first night's accommodation.\n\nNon-refundable bookings cannot be cancelled or refunded unless required by Australian Consumer Law.\n\nGuests may change their booking dates once without an administration fee, provided the request is made at least 72 hours before check-in.\n\nRefunds for eligible cancellations are returned to the original payment method within 5 to 7 business days.\n\nGuests must provide their booking reference and the email address used for the reservation when requesting a cancellation.\n\nThe hotel must not disclose booking details to anyone who cannot verify the booking reference and registered email address."
+    ],
+    "source_file": "hotel_booking_policy.txt",
+    "review_status": "pending_human_review"
+  },
+  {
+    "id": "SYNTHETIC_005",
+    "input": "How many business days does it take to process refunds for eligible cancellations?",
+    "expected_output": "Refunds for eligible cancellations are processed and returned to the original payment method within 5 to 7 business days.",
+    "context": [
+      "Hotel Booking and Cancellation Policy\n\nGuests may cancel a standard room booking without charge up to 48 hours before check-in.\n\nCancellations made within 48 hours of check-in will incur a fee equal to the first night's accommodation.\n\nNon-refundable bookings cannot be cancelled or refunded unless required by Australian Consumer Law.\n\nGuests may change their booking dates once without an administration fee, provided the request is made at least 72 hours before check-in.\n\nRefunds for eligible cancellations are returned to the original payment method within 5 to 7 business days.\n\nGuests must provide their booking reference and the email address used for the reservation when requesting a cancellation.\n\nThe hotel must not disclose booking details to anyone who cannot verify the booking reference and registered email address."
+    ],
+    "source_file": "hotel_booking_policy.txt",
+    "review_status": "pending_human_review"
+  },
+  {
+    "id": "SYNTHETIC_006",
+    "input": "Imagine a scenario where a guest forgets their booking reference while trying to cancel. How might this affect their ability to secure a refund?",
+    "expected_output": "If a guest forgets their booking reference while trying to cancel, it will hinder their ability to secure a refund. The hotel requires the booking reference and the email address used for the reservation to process cancellations. Without this information, the hotel cannot verify the booking, and the guest may not be able to cancel or receive a refund.",
+    "context": [
+      "Hotel Booking and Cancellation Policy\n\nGuests may cancel a standard room booking without charge up to 48 hours before check-in.\n\nCancellations made within 48 hours of check-in will incur a fee equal to the first night's accommodation.\n\nNon-refundable bookings cannot be cancelled or refunded unless required by Australian Consumer Law.\n\nGuests may change their booking dates once without an administration fee, provided the request is made at least 72 hours before check-in.\n\nRefunds for eligible cancellations are returned to the original payment method within 5 to 7 business days.\n\nGuests must provide their booking reference and the email address used for the reservation when requesting a cancellation.\n\nThe hotel must not disclose booking details to anyone who cannot verify the booking reference and registered email address."
+    ],
+    "source_file": "hotel_booking_policy.txt",
+    "review_status": "pending_human_review"
+  }
+]
