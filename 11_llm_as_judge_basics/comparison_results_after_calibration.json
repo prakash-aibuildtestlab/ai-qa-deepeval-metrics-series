@@ -1,0 +1,26 @@
+{
+  "input": "Can I cancel my hotel booking 24 hours before check-in?",
+  "actual_output": "Cancellations made within 48 hours of check-in incur a fee equal to the first night's accommodation. Therefore, if you cancel your booking 24 hours before check-in, you will be charged for the first night.",
+  "expected_output": "Yes, the booking can be cancelled 24 hours before check-in, but a fee equal to the first night's accommodation will apply.",
+  "judge_model": "gpt-4o-mini",
+  "runs": [
+    {
+      "run": 1,
+      "score": 0.605069084433619,
+      "threshold": 0.7,
+      "result": "FAIL",
+      "reason": "The Actual Output correctly states the cancellation fee for cancelling 24 hours before check-in, aligning with the requirement to mention it is equal to the first night's accommodation. However, it fails to explicitly confirm that the booking can be cancelled, which is a key aspect of the Input. Additionally, while it addresses the 24-hour scenario, it includes unnecessary repetition of the 48-hour policy, which detracts from clarity."
+    },
+    {
+      "run": 2,
+      "score": 0.7120872162492651,
+      "threshold": 0.7,
+      "result": "PASS",
+      "reason": "The response correctly states that cancellations made 24 hours before check-in incur a fee equal to the first night's accommodation, aligning with the cancellation policy. However, it unnecessarily repeats the 48-hour policy, which detracts from clarity. The Expected Output is clear and correct but lacks the explicit mention of the cancellation being allowed, which is present in the Actual Output."
+    }
+  ],
+  "comparison": {
+    "score_difference": 0.11,
+    "verdict_consistent": false
+  }
+}
