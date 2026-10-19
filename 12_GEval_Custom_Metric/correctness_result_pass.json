@@ -1,0 +1,10 @@
+{
+  "metric_name": "Event Ticket Policy Correctness",
+  "input": "I purchased a VIP ticket but can no longer attend. The concert is two weeks away. Can I get a refund or transfer the ticket to my friend?",
+  "expected_output": "The VIP ticket cannot be refunded because VIP tickets are non-refundable. However, it can be transferred to another person because the concert is more than 24 hours away. The customer must verify their booking reference and registered email address before the transfer can be processed.",
+  "actual_output": "VIP tickets are non-refundable, so you will not be able to get a refund. Additionally, transfers for tickets must be made at least 24 hours before the event, and since your concert is two weeks away, you can transfer the ticket to your friend. Please verify your booking reference and registered email address to process the transfer.",
+  "score": 0.9846878248228131,
+  "threshold": 0.8,
+  "result": "PASS",
+  "reason": "The response accurately states that VIP tickets are non-refundable, aligns with the transfer policy by confirming that transfers can be made since the concert is two weeks away, and includes the requirement for the customer to verify their booking reference and registered email address before processing the transfer. There are no unsupported promises or exceptions mentioned, demonstrating strong adherence to the evaluation steps."
+}

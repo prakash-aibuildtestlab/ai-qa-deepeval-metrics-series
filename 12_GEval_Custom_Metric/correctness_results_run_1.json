@@ -1,0 +1,35 @@
+[
+  {
+    "test_id": "TC01",
+    "scenario": "VIP refund and eligible transfer",
+    "input": "I purchased a VIP ticket but can no longer attend. The concert is two weeks away. Can I get a refund or transfer the ticket to my friend?",
+    "expected_output": "The VIP ticket cannot be refunded because VIP tickets are non-refundable. However, it can be transferred because more than 24 hours remain. The customer must verify their booking reference and registered email address before the transfer.",
+    "actual_output": "Unfortunately, VIP tickets are non-refundable, regardless of when the refund is requested. Additionally, tickets cannot be transferred when fewer than 24 hours remain before the event. Since the concert is two weeks away, you are able to transfer the ticket to your friend until 24 hours before the event.",
+    "score": 0.6228667911729769,
+    "threshold": 0.8,
+    "result": "FAIL",
+    "reason": "The response correctly identifies that VIP tickets are non-refundable and that transfers are allowed since the concert is two weeks away. However, it fails to mention the requirement for the customer to verify their booking reference and registered email address before processing the transfer, which is a mandatory process requirement. This omission moderately impacts the score."
+  },
+  {
+    "test_id": "TC02",
+    "scenario": "Eligible General Admission refund",
+    "input": "I have a General Admission ticket and the event is 10 days away. Can I cancel it and get my money back?",
+    "expected_output": "The ticket is eligible for a refund because the request is more than 7 calendar days before the event. Booking and processing fees are non-refundable. The eligible refund must be returned to the original payment method within 5\u201310 business days. The customer must verify their booking reference and registered email address.",
+    "actual_output": "Yes, since your General Admission ticket is being canceled more than 7 calendar days before the event, you can request a refund. Please ensure you verify your booking reference and registered email address for processing.",
+    "score": 0.624233848076848,
+    "threshold": 0.8,
+    "result": "FAIL",
+    "reason": "The response correctly identifies that the ticket can be refunded since the request is made more than 7 days before the event. However, it fails to mention that booking and processing fees are non-refundable, which is a critical requirement. Additionally, while it includes the need for verifying the booking reference and email, it does not specify the processing time of 5\u201310 business days for the refund, which is also a mandatory requirement."
+  },
+  {
+    "test_id": "TC03",
+    "scenario": "Transfer requested inside 24 hours",
+    "input": "My event starts in 12 hours. Can I transfer my ticket to another person?",
+    "expected_output": "The ticket cannot be transferred because fewer than 24 hours remain before the event. The assistant must not promise an exception outside the policy.",
+    "actual_output": "No, tickets cannot be transferred when fewer than 24 hours remain before the event. Since your event starts in 12 hours, you are not able to transfer your ticket.",
+    "score": 0.9318007490661442,
+    "threshold": 0.8,
+    "result": "PASS",
+    "reason": "The response accurately identifies the ticket type and the requested action, clearly stating that tickets cannot be transferred with less than 24 hours remaining. It aligns perfectly with the expected output by not promising any exceptions and adheres to the policy context regarding transfer limitations."
+  }
+]
