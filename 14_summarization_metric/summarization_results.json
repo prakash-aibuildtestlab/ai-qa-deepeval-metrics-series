@@ -1,0 +1,41 @@
+[
+  {
+    "test_id": "SUM01",
+    "scenario": "AI-generated comprehensive summary",
+    "summary": "**Disruption Report Summary: Flight SB218**\n\n- **Flight Details**: Flight SB218 from Melbourne to Singapore\n- **Scheduled Departure**: 9:30 AM, 18 October 2026\n- **Cause of Delay**: Fault in the hydraulic monitoring system discovered during pre-departure inspection\n- **Initial Delay Estimate**: Two hours; actual departure at 3:00 PM (5.5 hours late)\n- **Passenger Impact**:\n  - Total passengers: 186\n  - Notifications sent via email and SMS\n  - Meal vouchers issued: AUD 25 each\n  - Twelve passengers with connections moved to alternative services\n  - Seven passengers opted not to travel; received full refunds\n  - No overnight accommodations needed for passengers\n- **Baggage Status**: All checked baggage secured and loaded; no losses or damages reported\n- **Airline Statement**: Apology issued; safety was prioritized during the delay.",
+    "score": 0.8888888888888888,
+    "threshold": 0.8,
+    "result": "PASS",
+    "reason": "The score is 0.89 because the summary accurately reflects the main points of the original text without contradictions or extra information, but it fails to mention that all 186 passengers were notified, which is a key detail.",
+    "score_breakdown": {
+      "Alignment": 1.0,
+      "Coverage": 0.8888888888888888
+    }
+  },
+  {
+    "test_id": "SUM02",
+    "scenario": "Accurate but incomplete summary",
+    "summary": "Flight SB218 from Melbourne to Singapore was delayed by five and a half\nhours because of a hydraulic monitoring system fault. It eventually\ndeparted at 3:00 PM, and all 186 passengers were notified by email and SMS.",
+    "score": 0.3333333333333333,
+    "threshold": 0.8,
+    "result": "FAIL",
+    "reason": "The score is 0.33 because the summary lacks critical details from the original text, such as the AUD 25 meal vouchers, the movement of connecting passengers to alternative services, and the full refunds issued to some passengers. Additionally, it fails to clarify that hotel accommodation was not provided due to no overnight stay being required, and it does not mention that no checked baggage was lost or damaged. Furthermore, the summary does not explain that passenger safety was the reason for the delay, leaving several important questions unanswered.",
+    "score_breakdown": {
+      "Alignment": 1.0,
+      "Coverage": 0.3333333333333333
+    }
+  },
+  {
+    "test_id": "SUM03",
+    "scenario": "Detailed but incorrect summary",
+    "summary": "Flight SB218 was delayed for eight hours because of an engine failure.\nTwo hundred passengers were notified only after arriving at the airport.\nPassengers received AUD 100 vouchers, and no refunds or alternative\nflights were offered. Several bags were lost during the disruption.",
+    "score": 0.0,
+    "threshold": 0.8,
+    "result": "FAIL",
+    "reason": "The score is 0.00 because the summary contains multiple contradictions to the original text regarding the delay duration, passenger notification, compensation details, and baggage status, leading to a complete misrepresentation of the events.",
+    "score_breakdown": {
+      "Alignment": 0.0,
+      "Coverage": 0.0
+    }
+  }
+]
