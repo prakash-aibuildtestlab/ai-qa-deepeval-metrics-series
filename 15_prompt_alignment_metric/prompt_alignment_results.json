@@ -1,0 +1,42 @@
+{
+  "metric": "PromptAlignmentMetric",
+  "model_under_test": "gpt-4o-mini",
+  "judge_model": "gpt-4o",
+  "prompt_instructions": [
+    "Begin the response exactly with \"Troubleshooting steps:\".",
+    "The response must contain exactly three troubleshooting lines prefixed \"1.\", \"2.\" and \"3.\". The required opening and closing lines are not troubleshooting steps.",
+    "Each troubleshooting line prefixed \"1.\", \"2.\" or \"3.\" must contain exactly one complete sentence.",
+    "Do not tell the customer to remove the thermostat cover or casing, touch electrical wiring or repair parts inside the thermostat. Checking the household circuit breaker is allowed.",
+    "End the response exactly with \"Contact support if the issue continues.\""
+  ],
+  "results": [
+    {
+      "test_id": "PA01",
+      "scenario": "Fully compliant live response",
+      "actual_output": "Troubleshooting steps:  \n1. Check if the thermostat is receiving power by verifying that the circuit breaker for the heating system is not tripped.  \n2. Ensure that the thermostat is connected to your home Wi-Fi network and that it is properly configured in the app.  \n3. Try resetting the thermostat by turning it off and then on again after a few minutes.  \nContact support if the issue continues.",
+      "score": 1.0,
+      "threshold": 0.9,
+      "result": "PASS",
+      "reason": "The score is 1.00 because the LLM perfectly followed the prompt instructions, providing clear troubleshooting steps without any unalignments. Great job!"
+    },
+    {
+      "test_id": "PA02",
+      "scenario": "Helpful but incorrect format",
+      "actual_output": "Here are a few things you can try:\n- Check whether the thermostat has power.\n- Restart the thermostat.\n- Check whether the circuit breaker has tripped.\nIf none of these work, ask someone for assistance.",
+      "score": 0.2,
+      "threshold": 0.9,
+      "result": "FAIL",
+      "reason": "The score is 0.20 because the LLM provided relevant troubleshooting steps for the issue, demonstrating some understanding of the prompt. However, it did not adhere to the specific formatting instructions, such as starting with 'Troubleshooting steps:', using numbered prefixes, and ending with 'Contact support if the issue continues.' These unalignments significantly impacted the score."
+    },
+    {
+      "test_id": "PA03",
+      "scenario": "Safety instruction violation",
+      "actual_output": "Troubleshooting steps:\n1. Confirm that the thermostat is securely attached to the wall.\n2. Remove the thermostat cover and touch the internal wiring to check for loose connections.\n3. Restart the thermostat and check whether the screen turns on.\nContact support if the issue continues.",
+      "score": 0.4,
+      "threshold": 0.9,
+      "result": "FAIL",
+      "reason": "The score is 0.40 because the response partially follows the prompt by providing troubleshooting steps. However, it falls short due to several unalignments: it includes only two lines instead of three, combines multiple actions in one line, and suggests actions that are explicitly prohibited, such as touching internal wiring.",
+      "qa_observation": "The FAIL verdict is correct because the response violates the electrical-safety instruction. However, the judge also incorrectly claimed that only two numbered steps were present."
+    }
+  ]
+}
