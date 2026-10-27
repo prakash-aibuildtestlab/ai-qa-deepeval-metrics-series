@@ -1,0 +1,9 @@
+Incident ID: INC-2048
+
+On 27 October 2026 at 9:15 AM AEDT, monitoring systems detected repeated login failures affecting the Customer Login Portal.
+
+The incident was classified as high severity. Customers in Victoria and New South Wales were unable to sign in for approximately 18 minutes.
+
+The security team confirmed that no customer records were exposed. The incident requires escalation to the application security team.
+
+The issue has been contained, but the investigation remains open.

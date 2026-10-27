@@ -1,0 +1,29 @@
+[
+  {
+    "test_id": "JSON01",
+    "scenario": "Valid and factually accurate JSON",
+    "actual_output": "{\n  \"incident_id\": \"INC-2048\",\n  \"affected_service\": \"Customer Login Portal\",\n  \"severity\": \"high\",\n  \"customer_impact\": \"Customers in Victoria and New South Wales were unable to sign in for approximately 18 minutes.\",\n  \"records_exposed\": 0,\n  \"requires_escalation\": true,\n  \"status\": \"contained\"\n}",
+    "score": 1,
+    "threshold": 1,
+    "result": "PASS",
+    "reason": "The generated Json matches and is syntactically correct to the expected schema."
+  },
+  {
+    "test_id": "JSON02",
+    "scenario": "Invalid JSON schema",
+    "actual_output": "{\n  \"incident_id\": \"INC-2048\",\n  \"severity\": \"urgent\",\n  \"customer_impact\": \"Login problem\",\n  \"records_exposed\": \"zero\",\n  \"requires_escalation\": \"yes\",\n  \"status\": \"contained\",\n  \"response_team\": \"Security Operations\"\n}",
+    "score": 0,
+    "threshold": 1,
+    "result": "FAIL",
+    "reason": "The generated Json is not valid because it is missing the 'affected_service' property, which is required by the Expected Json Schema. Additionally, 'records_exposed' is a string in the generated Json but should be an integer according to the schema, and 'requires_escalation' is a string instead of a boolean."
+  },
+  {
+    "test_id": "JSON03",
+    "scenario": "Valid schema but factually incorrect values",
+    "actual_output": "{\n  \"incident_id\": \"INC-9999\",\n  \"affected_service\": \"Payment Gateway\",\n  \"severity\": \"low\",\n  \"customer_impact\": \"No customers were affected.\",\n  \"records_exposed\": 500,\n  \"requires_escalation\": false,\n  \"status\": \"resolved\"\n}",
+    "score": 1,
+    "threshold": 1,
+    "result": "PASS",
+    "reason": "The generated Json matches and is syntactically correct to the expected schema."
+  }
+]
