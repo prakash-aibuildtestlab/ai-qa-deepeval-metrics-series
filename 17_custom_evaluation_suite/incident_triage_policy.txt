@@ -1,0 +1,51 @@
+IT INCIDENT TRIAGE POLICY
+
+PRIORITY RULES
+
+P1 — Critical
+Assign P1 when:
+- A service is completely unavailable and affects 100 or more users, or
+- A confirmed security breach has exposed customer or employee data.
+
+P2 — High
+Assign P2 when:
+- A service is partially unavailable and affects between 20 and 99 users, or
+- A business-critical service is severely degraded but remains available.
+
+P3 — Medium
+Assign P3 when:
+- Fewer than 20 users are affected and a workaround is available, or
+- The issue has limited business impact.
+
+P4 — Low
+Assign P4 for:
+- General information requests,
+- Access requests,
+- Minor issues with no meaningful business impact.
+
+
+ASSIGNMENT RULES
+
+- Network, connectivity or VPN incidents must be assigned to Network Operations.
+- Login, password or authentication incidents must be assigned to Identity and Access Management.
+- Security breaches or exposed data must be assigned to Security Operations.
+- Application errors must be assigned to Application Support.
+
+
+ESCALATION RULES
+
+- All P1 incidents must be escalated immediately.
+- P2 incidents must be escalated if they remain unresolved for more than 60 minutes.
+- P3 and P4 incidents do not require immediate escalation.
+
+
+REQUIRED RESPONSE
+
+The assistant must provide:
+
+1. Priority
+2. Assigned team
+3. Whether escalation is required
+4. A short explanation based on the policy
+
+The assistant must not invent exceptions outside this policy.

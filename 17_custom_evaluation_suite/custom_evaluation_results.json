@@ -1,0 +1,56 @@
+[
+  {
+    "test_id": "CUSTOM01",
+    "scenario": "Correct incident-triage response",
+    "input": "The company VPN is completely unavailable. Approximately 150 remote\nemployees cannot connect, and there is currently no workaround. The issue\nstarted 40 minutes ago. There is no indication of a security breach or\nexposed data.",
+    "expected_output": "Priority: P1\nAssigned team: Network Operations\nEscalation required: Yes\nReason: The VPN is completely unavailable and affects 150 users. Under the\npolicy, a complete outage affecting 100 or more users is a P1 incident, and\nall P1 incidents must be escalated immediately.",
+    "actual_output": "1. **Priority**: P1  \n2. **Assigned team**: Network Operations  \n3. **Escalation required**: Yes  \n4. **Explanation**: The VPN is completely unavailable, affecting approximately 150 remote employees, which meets the criteria for a P1 incident. Immediate escalation is required due to the critical impact on a large number of users.",
+    "metrics": {
+      "geval": {
+        "score": 0.9989013057369407,
+        "threshold": 0.8,
+        "result": "PASS",
+        "reason": "The response accurately identifies the incident as a P1 priority due to the complete unavailability of the VPN affecting 150 users, which aligns with the priority rules. The assigned team, Network Operations, is appropriate for this incident type, and the escalation decision is correct as all P1 incidents must be escalated immediately. The explanation provided is consistent with the input and expected output, clearly outlining the rationale based on the policy."
+      },
+      "dag": {
+        "score": 1.0,
+        "threshold": 0.8,
+        "result": "PASS",
+        "reason": "The score is 1.0 because the DAG traversal confirms that all criteria were met successfully: Priority P1 was assigned, the incident was explicitly assigned to Network Operations, and escalation was deemed necessary due to critical impact, leading to a final verdict of True."
+      },
+      "custom": {
+        "score": 1.0,
+        "threshold": 1.0,
+        "result": "PASS",
+        "reason": "The response contains the required P1 priority, Network Operations assignment and escalation decision."
+      }
+    }
+  },
+  {
+    "test_id": "CUSTOM02",
+    "scenario": "Correct priority but incorrect team and escalation",
+    "input": "The company VPN is completely unavailable. Approximately 150 remote\nemployees cannot connect, and there is currently no workaround. The issue\nstarted 40 minutes ago. There is no indication of a security breach or\nexposed data.",
+    "expected_output": "Priority: P1\nAssigned team: Network Operations\nEscalation required: Yes\nReason: The VPN is completely unavailable and affects 150 users. Under the\npolicy, a complete outage affecting 100 or more users is a P1 incident, and\nall P1 incidents must be escalated immediately.",
+    "actual_output": "Priority: P1\nAssigned team: Application Support\nEscalation required: No\nReason: Although the VPN is unavailable, the incident has only been open\nfor 40 minutes, so it does not require escalation yet.",
+    "metrics": {
+      "geval": {
+        "score": 0.2619911693651971,
+        "threshold": 0.8,
+        "result": "FAIL",
+        "reason": "The assigned priority of P1 is correct as it aligns with the policy for a complete outage affecting 150 users. However, the assigned team of Application Support is incorrect; the incident should have been assigned to Network Operations according to the policy. Additionally, the decision not to escalate is also incorrect, as all P1 incidents must be escalated immediately. The explanation provided does not align with the expected output and fails to justify the lack of escalation."
+      },
+      "dag": {
+        "score": 0.4,
+        "threshold": 0.8,
+        "result": "FAIL",
+        "reason": "The score is 0.4 because the DAG traversal indicates that while the incident was correctly classified as Priority P1 (Verdict True at Level 0), it was incorrectly assigned to Application Support instead of Network Operations (Verdict False at Level 1). This discrepancy in team assignment led to a final verdict of False at Level 2, resulting in a lower overall score."
+      },
+      "custom": {
+        "score": 0.5,
+        "threshold": 1.0,
+        "result": "FAIL",
+        "reason": "Failed deterministic checks: assigned_team, escalation"
+      }
+    }
+  }
+]
