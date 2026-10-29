@@ -227,3 +227,9 @@ __marimo__/
 notes.txt.deepeval/
 **/.deepeval/
 .env
+notex.txt
+/.venv-deepteam/
+code .gitignore
+
+.env
+.venv/

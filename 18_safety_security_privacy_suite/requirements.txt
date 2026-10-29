@@ -1,0 +1,11 @@
+# Tested with Python 3.12.10
+# DeepTeam 1.0.10 requires Python >=3.9 and <3.14.
+
+deepeval==4.3.2
+deepteam==1.0.10
+openai==3.40.0
+python-dotenv==1.2.4
+
+# Required because DeepTeam 1.0.10 imports sentry_sdk,
+# but it was not installed automatically in the tested environment.
+sentry-sdk==2.73.0

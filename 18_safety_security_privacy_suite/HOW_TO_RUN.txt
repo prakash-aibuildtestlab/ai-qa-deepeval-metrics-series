@@ -1,0 +1,537 @@
+============================================================
+SAFETY, SECURITY AND PRIVACY EVALUATION SUITE
+HOW TO INSTALL AND RUN
+============================================================
+
+MODULE
+
+18_safety_security_privacy_suite
+
+
+WHAT THIS MODULE TESTS
+
+This module evaluates a digital banking support chatbot using:
+
+DeepEval metrics:
+1. Toxicity
+2. Bias
+3. Misuse
+4. Non-Advice
+5. PII Leakage
+6. Role Violation
+
+DeepTeam security tests:
+1. PII Leakage attacked through Prompt Injection
+2. Controlled vulnerable chatbot test
+3. Two-turn Linear Jailbreaking test
+
+
+============================================================
+PREREQUISITES
+============================================================
+
+You need:
+
+- Git
+- Python 3.12
+- An OpenAI API key
+- OpenAI API credits
+- Internet access
+
+Python 3.12 is recommended because DeepTeam 1.0.10 does not
+support Python 3.14.
+
+Important:
+
+A ChatGPT Plus subscription does not automatically include OpenAI
+API credits. OpenAI API usage is billed separately.
+
+
+============================================================
+STEP 1 — CLONE THE REPOSITORY
+============================================================
+
+Run:
+
+git clone <https://github.com/prakash-aibuildtestlab/ai-qa-deepeval-metrics-series.git>
+
+Then enter the repository:
+
+cd ai-qa-deepeval-metrics-series
+
+
+============================================================
+STEP 2 — CHECK PYTHON
+============================================================
+
+Run:
+
+python3.12 --version
+
+Expected example:
+
+Python 3.12.10
+
+If Python 3.12 is not installed, download it from:
+
+https://www.python.org/downloads/
+
+
+============================================================
+STEP 3 — CREATE A VIRTUAL ENVIRONMENT
+============================================================
+
+MACOS OR LINUX
+
+Run from the repository root:
+
+python3.12 -m venv .venv
+
+Activate it:
+
+source .venv/bin/activate
+
+
+WINDOWS POWERSHELL
+
+Create the environment:
+
+py -3.12 -m venv .venv
+
+Activate it:
+
+.venv\Scripts\Activate.ps1
+
+
+WINDOWS COMMAND PROMPT
+
+Create the environment:
+
+py -3.12 -m venv .venv
+
+Activate it:
+
+.venv\Scripts\activate.bat
+
+
+After activation, the terminal should show:
+
+(.venv)
+
+
+============================================================
+STEP 4 — INSTALL THE DEPENDENCIES
+============================================================
+
+Upgrade pip:
+
+python -m pip install --upgrade pip
+
+Install the module dependencies:
+
+python -m pip install -r \
+18_safety_security_privacy_suite/requirements.txt
+
+On Windows, the command can be written on one line:
+
+python -m pip install -r 18_safety_security_privacy_suite/requirements.txt
+
+Check for dependency problems:
+
+python -m pip check
+
+Expected:
+
+No broken requirements found.
+
+
+============================================================
+STEP 5 — CREATE THE ENVIRONMENT FILE
+============================================================
+
+The API key must be stored in a file named:
+
+.env
+
+The .env file must be created in the REPOSITORY ROOT, not inside
+the Module 18 folder.
+
+The expected structure is:
+
+ai-qa-deepeval-metrics-series/
+|
+|-- .env
+|-- .env.example
+|-- 18_safety_security_privacy_suite/
+    |-- test_safety_privacy_metrics.py
+    |-- test_deepteam_red_teaming.py
+
+
+MACOS OR LINUX
+
+Copy the example file:
+
+cp .env.example .env
+
+
+WINDOWS POWERSHELL
+
+Copy the example file:
+
+Copy-Item .env.example .env
+
+
+Open the new .env file and replace the placeholder with your own
+OpenAI API key:
+
+OPENAI_API_KEY=your_actual_openai_api_key
+
+
+Example format:
+
+OPENAI_API_KEY=your_actual_openai_api_key
+
+
+Do not:
+
+- Add quotation marks around the key
+- Add spaces around the equals sign
+- Commit the .env file
+- Share the API key
+- Place a real API key in .env.example
+
+
+Obtain an OpenAI API key from:
+
+https://platform.openai.com/api-keys
+
+
+============================================================
+STEP 6 — CONFIRM THAT THE API KEY CAN BE LOADED
+============================================================
+
+Run this command from the repository root:
+
+python -c "from pathlib import Path; from dotenv import load_dotenv; import os; load_dotenv(Path('.env')); print('API key loaded:', bool(os.getenv('OPENAI_API_KEY')))"
+
+Expected:
+
+API key loaded: True
+
+If the result is False:
+
+1. Confirm the file is named exactly .env
+2. Confirm it is in the repository root
+3. Confirm the variable is named OPENAI_API_KEY
+4. Confirm there are no spaces around the equals sign
+
+
+============================================================
+STEP 7 — RUN THE DEEPEVAL SAFETY AND PRIVACY SUITE
+============================================================
+
+Run this command from the repository root:
+
+python 18_safety_security_privacy_suite/test_safety_privacy_metrics.py
+
+
+This suite runs 12 test cases:
+
+- Six live policy-grounded chatbot responses
+- Six controlled unsafe responses
+
+
+Expected summary:
+
+Total test cases: 12
+Expectations met: 12
+Unexpected results: 0
+
+
+Results are saved to:
+
+18_safety_security_privacy_suite/safety_privacy_results.json
+
+
+Important:
+
+The controlled negative tests are expected to receive FAIL results.
+
+For example:
+
+- A professional response should PASS Toxicity.
+- An insulting controlled response should FAIL Toxicity.
+
+When the expected result is FAIL and the metric returns FAIL, the test
+expectation has been met.
+
+
+============================================================
+STEP 8 — RUN THE DEEPTEAM SECURITY SUITE
+============================================================
+
+First, verify the DeepTeam imports:
+
+python -c "from deepteam import red_team; from deepteam.vulnerabilities import PIILeakage; from deepteam.attacks.single_turn import PromptInjection; from deepteam.attacks.multi_turn import LinearJailbreaking; print('DeepTeam imports successful')"
+
+
+Expected:
+
+DeepTeam imports successful
+
+
+Run the DeepTeam suite:
+
+python 18_safety_security_privacy_suite/test_deepteam_red_teaming.py
+
+
+The suite performs three tests:
+
+DT01
+Protected banking chatbot tested against single-turn Prompt Injection.
+
+Expected result: PASS
+
+
+DT02
+Deliberately vulnerable callback returns fictional PII.
+
+Expected result: FAIL
+
+
+DT03
+Protected banking chatbot tested against two-turn Linear Jailbreaking.
+
+Expected result: PASS
+
+
+Expected summary:
+
+Total test cases: 3
+Expectations met: 3
+Unexpected results: 0
+
+
+Results are saved to:
+
+18_safety_security_privacy_suite/deepteam_results.json
+
+
+============================================================
+UNDERSTANDING THE DEEPTEAM RESULTS
+============================================================
+
+DeepTeam uses two score directions.
+
+
+INDIVIDUAL TEST SCORE
+
+1.0 = The chatbot mitigated the attack
+0.0 = The chatbot was vulnerable
+
+
+CVSS RISK SCORE
+
+0.0 = No detected security risk
+A higher score = Greater detected security risk
+
+
+Example protected result:
+
+Test score: 1.0
+Mitigation rate: 100%
+CVSS score: 0.0
+Result: PASS
+
+
+Example vulnerable result:
+
+Test score: 0.0
+Mitigation rate: 0%
+CVSS score: 6.0
+Result: FAIL
+
+
+============================================================
+OUTPUT FILES
+============================================================
+
+DeepEval results:
+
+18_safety_security_privacy_suite/safety_privacy_results.json
+
+
+DeepTeam results:
+
+18_safety_security_privacy_suite/deepteam_results.json
+
+
+Validate the JSON files:
+
+python -m json.tool \
+18_safety_security_privacy_suite/safety_privacy_results.json \
+> /dev/null
+
+python -m json.tool \
+18_safety_security_privacy_suite/deepteam_results.json \
+> /dev/null
+
+
+On Windows PowerShell:
+
+python -m json.tool 18_safety_security_privacy_suite/safety_privacy_results.json | Out-Null
+
+python -m json.tool 18_safety_security_privacy_suite/deepteam_results.json | Out-Null
+
+
+============================================================
+IMPORTANT TESTING NOTES
+============================================================
+
+1. These scripts make live OpenAI API calls.
+
+2. Running them may incur OpenAI API charges.
+
+3. AI-generated answers may differ between runs.
+
+4. LLM-as-a-judge scores and reasons may also vary.
+
+5. DeepTeam generates adversarial prompts dynamically, so the exact
+   attack wording may change.
+
+6. The demonstration uses one attack per vulnerability type to control
+   runtime and cost.
+
+7. A PASS against one generated attack does not prove that the chatbot
+   is secure against every possible attack.
+
+8. Production security testing should include:
+
+   - Multiple attacks per vulnerability type
+   - Additional privacy and security vulnerabilities
+   - More multi-turn jailbreak attempts
+   - Different models
+   - Human review
+   - Regression testing
+   - CI/CD quality gates
+
+
+============================================================
+TROUBLESHOOTING
+============================================================
+
+PROBLEM:
+
+ModuleNotFoundError: No module named 'deepteam'
+
+SOLUTION:
+
+Confirm the virtual environment is active and reinstall dependencies:
+
+source .venv/bin/activate
+
+python -m pip install -r \
+18_safety_security_privacy_suite/requirements.txt
+
+
+------------------------------------------------------------
+
+PROBLEM:
+
+ModuleNotFoundError: No module named 'sentry_sdk'
+
+SOLUTION:
+
+Run:
+
+python -m pip install sentry-sdk
+
+
+------------------------------------------------------------
+
+PROBLEM:
+
+OPENAI_API_KEY is missing from the root .env file
+
+SOLUTION:
+
+Confirm that:
+
+1. The file is named .env
+2. The file is in the repository root
+3. It contains:
+
+OPENAI_API_KEY=your_actual_openai_api_key
+
+
+------------------------------------------------------------
+
+PROBLEM:
+
+No matching distribution found for deepteam
+
+SOLUTION:
+
+Check the Python version:
+
+python --version
+
+DeepTeam 1.0.10 requires Python below 3.14.
+
+Use Python 3.12:
+
+python3.12 -m venv .venv
+source .venv/bin/activate
+
+Then reinstall the dependencies.
+
+
+------------------------------------------------------------
+
+PROBLEM:
+
+The score or generated response changed between runs
+
+EXPLANATION:
+
+This is expected because the chatbot, evaluator and adversarial attack
+generator use language models. Their outputs can be non-deterministic.
+
+Review:
+
+- The generated response
+- The metric score
+- The evaluator reason
+- Whether the expected behaviour was detected
+
+
+============================================================
+SECURITY
+============================================================
+
+The following files and folders must not be committed:
+
+.env
+.venv/
+.venv-deepteam/
+
+The repository should only contain:
+
+.env.example
+
+The controlled privacy violations use fictional test information only.
+No real customer or banking data is used.
+
+
+============================================================
+DEACTIVATE THE ENVIRONMENT
+============================================================
+
+When finished, run:
+
+deactivate
+
+
+============================================================
+END
+============================================================
