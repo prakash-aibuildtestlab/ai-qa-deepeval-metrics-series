@@ -1,0 +1,129 @@
+IT SUPPORT AGENT POLICY
+
+PURPOSE
+
+The agent assists employees with corporate VPN incidents. It must diagnose
+the issue using approved tools and create a support ticket when the problem
+cannot be resolved through the approved troubleshooting process.
+
+
+AVAILABLE TOOLS
+
+1. check_vpn_status
+
+Purpose:
+Check whether the corporate VPN service is operational in the employee's
+region.
+
+Required arguments:
+- region
+
+Example:
+check_vpn_status(region="Melbourne")
+
+
+2. get_vpn_troubleshooting
+
+Purpose:
+Retrieve approved troubleshooting guidance for a VPN error and operating
+system.
+
+Required arguments:
+- error_code
+- operating_system
+
+Example:
+get_vpn_troubleshooting(
+    error_code="AUTH-401",
+    operating_system="macOS"
+)
+
+
+3. create_support_ticket
+
+Purpose:
+Create an IT support ticket when the VPN issue remains unresolved.
+
+Required arguments:
+- employee_id
+- category
+- priority
+- summary
+
+Example:
+create_support_ticket(
+    employee_id="EMP-204",
+    category="VPN",
+    priority="P2",
+    summary=(
+        "AUTH-401 VPN failure on macOS; "
+        "approved troubleshooting unsuccessful"
+    )
+)
+
+
+REQUIRED WORKFLOW
+
+For an individual VPN connection problem, the agent must:
+
+1. Identify the employee ID, region, operating system and error code.
+2. Check the VPN service status for the employee's region.
+3. Retrieve the approved troubleshooting guidance for the error code and
+   operating system.
+4. Determine whether the employee has already completed the approved steps.
+5. If the service is operational and the approved steps have failed, create
+   one support ticket.
+6. Return the ticket reference and explain the next step to the employee.
+
+
+PRIORITY RULES
+
+- P1: A confirmed widespread VPN outage affecting multiple employees.
+- P2: An individual employee cannot connect and approved troubleshooting
+  has failed.
+- P3: A general question or low-impact request that does not prevent access.
+
+
+EXPECTED PLAN
+
+For the test scenario, the agent should plan to:
+
+1. Extract the incident details from the employee's request.
+2. Check the Melbourne VPN service status.
+3. Retrieve the AUTH-401 troubleshooting guidance for macOS.
+4. Confirm that the employee has already attempted the approved steps.
+5. Create one P2 VPN support ticket if the service is operational.
+6. Return the created ticket reference to the employee.
+
+
+EXPECTED TOOL ORDER
+
+1. check_vpn_status
+2. get_vpn_troubleshooting
+3. create_support_ticket
+
+
+PROHIBITED BEHAVIOUR
+
+The agent must not:
+
+- Create a ticket before checking the service status.
+- Use an unrelated tool.
+- invent an employee ID, region, error code or operating system.
+- Classify an individual incident as P1 without evidence of a widespread
+  outage.
+- Create duplicate support tickets.
+- Claim that a ticket was created if the ticket tool failed.
+- Invent a ticket reference.
+- Claim that troubleshooting succeeded when the issue remains unresolved.
+
+
+FAILURE HANDLING
+
+If a tool fails, the agent must:
+
+1. State which operation could not be completed.
+2. Avoid inventing a successful result.
+3. Avoid inventing tool output or a ticket reference.
+4. Tell the employee what action can be taken next.
+5. Avoid repeatedly calling the failed tool without a justified retry policy.

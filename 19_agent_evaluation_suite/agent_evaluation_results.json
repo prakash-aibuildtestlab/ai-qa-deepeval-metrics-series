@@ -1,0 +1,339 @@
+{
+  "module": "Agent Behaviour Evaluation Suite",
+  "model": "gpt-4o-mini",
+  "test_input": "I am employee EMP-204 in Melbourne using macOS. My corporate VPN shows\nAUTH-401. I already restarted the VPN client and re-authenticated, but it\nstill does not connect. Check the service status and create a support ticket\nif there is no additional approved fix.",
+  "expected_tools": [
+    {
+      "name": "check_vpn_status",
+      "input_parameters": {
+        "region": "Melbourne"
+      }
+    },
+    {
+      "name": "get_vpn_troubleshooting",
+      "input_parameters": {
+        "error_code": "AUTH-401",
+        "operating_system": "macOS"
+      }
+    },
+    {
+      "name": "create_support_ticket",
+      "input_parameters": {
+        "employee_id": "EMP-204",
+        "category": "VPN",
+        "priority": "P2",
+        "summary": "AUTH-401 VPN failure on macOS; approved troubleshooting unsuccessful"
+      }
+    }
+  ],
+  "positive_test": {
+    "test_results": [
+      {
+        "name": "test_case_0",
+        "success": false,
+        "metrics_data": [
+          {
+            "name": "Task Completion",
+            "threshold": 0.8,
+            "success": true,
+            "score": 0.95,
+            "reason": "The system successfully checked the VPN service status, retrieved the necessary troubleshooting guidance, and created a support ticket with a reference number. However, it did not confirm whether the issue was resolved after the ticket creation.",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-4o-mini",
+            "error": null,
+            "evaluation_cost": 0.00083265,
+            "input_tokens": 4979,
+            "output_tokens": 143,
+            "verbose_logs": "Task: Check the Melbourne VPN service status, retrieve the approved AUTH-401 troubleshooting guidance for macOS and create one P2 support ticket if the issue remains unresolved. Return the real ticket reference to the employee. \n \nOutcome: The system checked the corporate VPN service status for Melbourne and confirmed it was operational. It retrieved approved troubleshooting steps for the AUTH-401 error and noted that the employee had already completed these steps. A support ticket was created with the reference INC-9001.",
+            "expectations_data": null
+          },
+          {
+            "name": "Step Efficiency",
+            "threshold": 0.8,
+            "success": false,
+            "score": 0.5,
+            "reason": "The agent executed unnecessary intermediate steps, including multiple decision-making calls and redundant confirmations of the VPN status and troubleshooting steps. The task could have been completed with fewer direct calls to the necessary tools.",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-4o-mini",
+            "error": null,
+            "evaluation_cost": 0.0014815499999999999,
+            "input_tokens": 9569,
+            "output_tokens": 77,
+            "verbose_logs": "Task: Check the corporate VPN service status and create a support ticket for the AUTH-401 error if there is no additional approved fix. \n \n \nEfficiency Score: 0.5",
+            "expectations_data": null
+          },
+          {
+            "name": "Plan Quality",
+            "threshold": 0.8,
+            "success": false,
+            "score": 0.5,
+            "reason": "The plan is partially complete but lacks clarity on how to determine if the VPN is operational or if troubleshooting steps have already failed. Additionally, it does not specify what to do if the VPN is down, which is critical for addressing the user's task.",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-4o-mini",
+            "error": null,
+            "evaluation_cost": 0.0015913499999999998,
+            "input_tokens": 9817,
+            "output_tokens": 198,
+            "verbose_logs": "Task: Check the corporate VPN service status and create a support ticket for the AUTH-401 error if there is no additional approved fix. \n \n \nAgent Plan: \n[\n    \"Call check_vpn_status for the employee's region.\",\n    \"If operational, call get_vpn_troubleshooting for the error code 'AUTH-401' and operating system 'macOS.' If there is a widespread outage, do not perform individual troubleshooting.\",\n    \"If operational and the approved steps have already failed, call create_support_ticket once using P2. If there is a widespread outage, follow the P1 outage policy.\",\n    \"Return the verified service status and real ticket reference.\"\n] \n \n \nFinal Score: 0.5 \n",
+            "expectations_data": null
+          },
+          {
+            "name": "Plan Adherence",
+            "threshold": 0.8,
+            "success": false,
+            "score": 0.0,
+            "reason": "The execution trace shows that the agent created a support ticket immediately after confirming the VPN status was operational, which violates the plan's requirement to check if the approved troubleshooting steps had already failed before creating the ticket. Additionally, the plan specifies that if there is a widespread outage, individual troubleshooting should not be performed, but the agent proceeded with troubleshooting despite the operational status.",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-4o-mini",
+            "error": null,
+            "evaluation_cost": 0.00216675,
+            "input_tokens": 13561,
+            "output_tokens": 221,
+            "verbose_logs": "Task: Check the corporate VPN service status and create a support ticket for the AUTH-401 error if there is no additional approved fix. \n \n \nAgent Plan: \n[\n    \"Call check_vpn_status for the employee's region.\",\n    \"If operational, call get_vpn_troubleshooting for the error code \"AUTH-401\" and operating system \"macOS.\" If there is a widespread outage, do not perform individual troubleshooting.\",\n    \"If operational and the approved steps have already failed, call create_support_ticket once using P2. If there is a widespread outage, follow the P1 outage policy.\",\n    \"Return the verified service status and real ticket reference.\"\n] \n \n \nFinal Score: 0.0 \n",
+            "expectations_data": null
+          }
+        ],
+        "conversational": false,
+        "index": 0,
+        "multimodal": false,
+        "input": "I am employee EMP-204 in Melbourne using macOS. My corporate VPN shows\nAUTH-401. I already restarted the VPN client and re-authenticated, but it\nstill does not connect. Check the service status and create a support ticket\nif there is no additional approved fix.",
+        "actual_output": "The corporate VPN service in Melbourne is operational, and you have already completed the approved troubleshooting steps for the AUTH-401 error on macOS.\n\nA support ticket has been created with the reference: **INC-9001**. \n\nPlease let me know if you need further assistance.",
+        "expected_output": null,
+        "context": null,
+        "retrieval_context": null,
+        "turns": null,
+        "metadata": null,
+        "classifications": null,
+        "expectations": null
+      },
+      {
+        "name": "make_agent_decision",
+        "success": false,
+        "metrics_data": [
+          {
+            "name": "Tool Correctness",
+            "threshold": 0.8,
+            "success": true,
+            "score": 1.0,
+            "reason": "[\n\t Tool Calling Reason: Correct ordering: all expected tools ['create_support_ticket'] were called in the correct order.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-5.4",
+            "error": null,
+            "evaluation_cost": 0.0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "verbose_logs": "Expected Tools:\n[\n    ToolCall(\n        name=\"create_support_ticket\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"employee_id\": \"EMP-204\",\n            \"category\": \"VPN\",\n            \"priority\": \"P2\",\n            \"summary\": \"AUTH-401 VPN failure on macOS; approved troubleshooting unsuccessful\"\n        }\n    )\n] \n \nTools Called:\n[\n    ToolCall(\n        name=\"create_support_ticket\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"employee_id\": \"EMP-204\",\n            \"category\": \"VPN\",\n            \"priority\": \"P2\",\n            \"summary\": \"AUTH-401 VPN failure on macOS; approved troubleshooting unsuccessful\"\n        }\n    )\n] \n \nAvailable Tools: [] \n \nTool Selection Score: 1.0 \n \nTool Selection Reason: No available tools were provided to assess tool selection criteria",
+            "expectations_data": null
+          },
+          {
+            "name": "Argument Correctness",
+            "threshold": 0.8,
+            "success": true,
+            "score": 1.0,
+            "reason": "The score is 1.00 because all tool calls align perfectly with the approved plan and the input provided. There are no incorrect tool calls, and the process is being followed correctly.",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-4o-mini",
+            "error": null,
+            "evaluation_cost": 0.0007653,
+            "input_tokens": 4170,
+            "output_tokens": 233,
+            "verbose_logs": "Verdicts:\n[\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    },\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    },\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    },\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    }\n]",
+            "expectations_data": null
+          }
+        ],
+        "conversational": false,
+        "index": null,
+        "multimodal": null,
+        "input": "USER REQUEST:\nI am employee EMP-204 in Melbourne using macOS. My corporate VPN shows\nAUTH-401. I already restarted the VPN client and re-authenticated, but it\nstill does not connect. Check the service status and create a support ticket\nif there is no additional approved fix.\n\nAPPROVED PLAN:\n1. Call check_vpn_status for the employee's region.\n2. If operational, call get_vpn_troubleshooting for the error code \"AUTH-401\" and operating system \"macOS.\" If there is a widespread outage, do not perform individual troubleshooting.\n3. If operational and the approved steps have already failed, call create_support_ticket once using P2. If there is a widespread outage, follow the P1 outage policy.\n4. Return the verified service status and real ticket reference.\n\nOBSERVED TOOL RESULTS:\nNo previous tool results. This is the first decision.\n\nCURRENT DECISION NUMBER: 1",
+        "actual_output": "Decision 1: call check_vpn_status",
+        "expected_output": null,
+        "context": null,
+        "retrieval_context": null,
+        "turns": null,
+        "metadata": null,
+        "classifications": null,
+        "expectations": null
+      },
+      {
+        "name": "make_agent_decision",
+        "success": false,
+        "metrics_data": [
+          {
+            "name": "Tool Correctness",
+            "threshold": 0.8,
+            "success": true,
+            "score": 1.0,
+            "reason": "[\n\t Tool Calling Reason: Correct ordering: all expected tools ['create_support_ticket'] were called in the correct order.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-5.4",
+            "error": null,
+            "evaluation_cost": 0.0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "verbose_logs": "Expected Tools:\n[\n    ToolCall(\n        name=\"create_support_ticket\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"employee_id\": \"EMP-204\",\n            \"category\": \"VPN\",\n            \"priority\": \"P2\",\n            \"summary\": \"AUTH-401 VPN failure on macOS; approved troubleshooting unsuccessful\"\n        }\n    )\n] \n \nTools Called:\n[\n    ToolCall(\n        name=\"create_support_ticket\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"employee_id\": \"EMP-204\",\n            \"category\": \"VPN\",\n            \"priority\": \"P2\",\n            \"summary\": \"AUTH-401 VPN failure on macOS; approved troubleshooting unsuccessful\"\n        }\n    )\n] \n \nAvailable Tools: [] \n \nTool Selection Score: 1.0 \n \nTool Selection Reason: No available tools were provided to assess tool selection criteria",
+            "expectations_data": null
+          },
+          {
+            "name": "Argument Correctness",
+            "threshold": 0.8,
+            "success": true,
+            "score": 1.0,
+            "reason": "The score is 1.00 because all tool calls were executed correctly according to the approved plan, and the service status check confirmed that the VPN is operational without any widespread outage.",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-4o-mini",
+            "error": null,
+            "evaluation_cost": 0.00067485,
+            "input_tokens": 3731,
+            "output_tokens": 192,
+            "verbose_logs": "Verdicts:\n[\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    },\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    },\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    },\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    }\n]",
+            "expectations_data": null
+          }
+        ],
+        "conversational": false,
+        "index": null,
+        "multimodal": null,
+        "input": "USER REQUEST:\nI am employee EMP-204 in Melbourne using macOS. My corporate VPN shows\nAUTH-401. I already restarted the VPN client and re-authenticated, but it\nstill does not connect. Check the service status and create a support ticket\nif there is no additional approved fix.\n\nAPPROVED PLAN:\n1. Call check_vpn_status for the employee's region.\n2. If operational, call get_vpn_troubleshooting for the error code \"AUTH-401\" and operating system \"macOS.\" If there is a widespread outage, do not perform individual troubleshooting.\n3. If operational and the approved steps have already failed, call create_support_ticket once using P2. If there is a widespread outage, follow the P1 outage policy.\n4. Return the verified service status and real ticket reference.\n\nOBSERVED TOOL RESULTS:\n[\n  {\n    \"tool\": \"check_vpn_status\",\n    \"arguments\": {\n      \"region\": \"Melbourne\"\n    },\n    \"result\": {\n      \"region\": \"Melbourne\",\n      \"service\": \"Corporate VPN\",\n      \"status\": \"operational\",\n      \"widespread_outage\": false\n    }\n  }\n]\n\nCURRENT DECISION NUMBER: 2",
+        "actual_output": "Decision 2: call get_vpn_troubleshooting",
+        "expected_output": null,
+        "context": null,
+        "retrieval_context": null,
+        "turns": null,
+        "metadata": null,
+        "classifications": null,
+        "expectations": null
+      },
+      {
+        "name": "make_agent_decision",
+        "success": false,
+        "metrics_data": [
+          {
+            "name": "Tool Correctness",
+            "threshold": 0.8,
+            "success": true,
+            "score": 1.0,
+            "reason": "[\n\t Tool Calling Reason: Correct ordering: all expected tools ['create_support_ticket'] were called in the correct order.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-5.4",
+            "error": null,
+            "evaluation_cost": 0.0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "verbose_logs": "Expected Tools:\n[\n    ToolCall(\n        name=\"create_support_ticket\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"employee_id\": \"EMP-204\",\n            \"category\": \"VPN\",\n            \"priority\": \"P2\",\n            \"summary\": \"AUTH-401 VPN failure on macOS; approved troubleshooting unsuccessful\"\n        }\n    )\n] \n \nTools Called:\n[\n    ToolCall(\n        name=\"create_support_ticket\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"employee_id\": \"EMP-204\",\n            \"category\": \"VPN\",\n            \"priority\": \"P2\",\n            \"summary\": \"AUTH-401 VPN failure on macOS; approved troubleshooting unsuccessful\"\n        }\n    )\n] \n \nAvailable Tools: [] \n \nTool Selection Score: 1.0 \n \nTool Selection Reason: No available tools were provided to assess tool selection criteria",
+            "expectations_data": null
+          },
+          {
+            "name": "Argument Correctness",
+            "threshold": 0.8,
+            "success": true,
+            "score": 1.0,
+            "reason": "The score is 1.00 because all tool calls were executed correctly according to the approved plan, and the results align with the user's request. There were no incorrect tool calls or deviations from the expected process.",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-4o-mini",
+            "error": null,
+            "evaluation_cost": 0.0008865,
+            "input_tokens": 4794,
+            "output_tokens": 279,
+            "verbose_logs": "Verdicts:\n[\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    },\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    },\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    },\n    {\n        \"verdict\": \"yes\",\n        \"reason\": null\n    }\n]",
+            "expectations_data": null
+          }
+        ],
+        "conversational": false,
+        "index": null,
+        "multimodal": null,
+        "input": "USER REQUEST:\nI am employee EMP-204 in Melbourne using macOS. My corporate VPN shows\nAUTH-401. I already restarted the VPN client and re-authenticated, but it\nstill does not connect. Check the service status and create a support ticket\nif there is no additional approved fix.\n\nAPPROVED PLAN:\n1. Call check_vpn_status for the employee's region.\n2. If operational, call get_vpn_troubleshooting for the error code \"AUTH-401\" and operating system \"macOS.\" If there is a widespread outage, do not perform individual troubleshooting.\n3. If operational and the approved steps have already failed, call create_support_ticket once using P2. If there is a widespread outage, follow the P1 outage policy.\n4. Return the verified service status and real ticket reference.\n\nOBSERVED TOOL RESULTS:\n[\n  {\n    \"tool\": \"check_vpn_status\",\n    \"arguments\": {\n      \"region\": \"Melbourne\"\n    },\n    \"result\": {\n      \"region\": \"Melbourne\",\n      \"service\": \"Corporate VPN\",\n      \"status\": \"operational\",\n      \"widespread_outage\": false\n    }\n  },\n  {\n    \"tool\": \"get_vpn_troubleshooting\",\n    \"arguments\": {\n      \"error_code\": \"AUTH-401\",\n      \"operating_system\": \"macOS\"\n    },\n    \"result\": {\n      \"error_code\": \"AUTH-401\",\n      \"operating_system\": \"macOS\",\n      \"approved_steps\": [\n        \"Restart the VPN client\",\n        \"Re-authenticate using the corporate identity provider\"\n      ],\n      \"employee_already_completed_steps\": true,\n      \"recommended_action\": \"Create a P2 VPN support ticket if the issue continues.\"\n    }\n  }\n]\n\nCURRENT DECISION NUMBER: 3",
+        "actual_output": "Decision 3: call create_support_ticket",
+        "expected_output": null,
+        "context": null,
+        "retrieval_context": null,
+        "turns": null,
+        "metadata": null,
+        "classifications": null,
+        "expectations": null
+      }
+    ],
+    "confident_link": null,
+    "test_run_id": null
+  },
+  "controlled_failure_test": {
+    "test_results": [
+      {
+        "name": "test_case_0",
+        "success": false,
+        "metrics_data": [
+          {
+            "name": "Task Completion",
+            "threshold": 0.8,
+            "success": false,
+            "score": 0.3,
+            "reason": "The system checked the VPN service status but for Sydney instead of Melbourne, which does not meet the task requirement. Additionally, a P3 ticket was created instead of the required P2 ticket, and the ticket reference provided does not pertain to the VPN issue as specified.",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-4o-mini",
+            "error": null,
+            "evaluation_cost": 0.0004068,
+            "input_tokens": 2140,
+            "output_tokens": 143,
+            "verbose_logs": "Task: Check the Melbourne VPN service status, retrieve the approved AUTH-401 troubleshooting guidance for macOS, create one P2 support ticket and return the real ticket reference. \n \nOutcome: The system checked the VPN service status in Sydney and confirmed it was operational with no widespread outage. A P3 support ticket was created for employee EMP-204 with reference number INC-9001 regarding the VPN connection problem.",
+            "expectations_data": null
+          },
+          {
+            "name": "Tool Correctness",
+            "threshold": 0.8,
+            "success": false,
+            "score": 0.6666666666666666,
+            "reason": "[\n\t Tool Calling Reason: Incorrect tool usage: missing tools ['get_vpn_troubleshooting'] and out-of-order tools ['get_vpn_troubleshooting']; expected ['check_vpn_status', 'get_vpn_troubleshooting', 'create_support_ticket'], called ['check_vpn_status', 'create_support_ticket']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-5.4",
+            "error": null,
+            "evaluation_cost": 0.0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "verbose_logs": "Expected Tools:\n[\n    ToolCall(\n        name=\"check_vpn_status\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"region\": \"Melbourne\"\n        }\n    ),\n    ToolCall(\n        name=\"get_vpn_troubleshooting\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"error_code\": \"AUTH-401\",\n            \"operating_system\": \"macOS\"\n        }\n    ),\n    ToolCall(\n        name=\"create_support_ticket\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"employee_id\": \"EMP-204\",\n            \"category\": \"VPN\",\n            \"priority\": \"P2\",\n            \"summary\": \"AUTH-401 VPN failure on macOS; approved troubleshooting unsuccessful\"\n        }\n    )\n] \n \nTools Called:\n[\n    ToolCall(\n        name=\"check_vpn_status\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"region\": \"Sydney\"\n        }\n    ),\n    ToolCall(\n        name=\"create_support_ticket\",\n        type=\"FUNCTION\",\n        input_parameters={\n            \"employee_id\": \"EMP-204\",\n            \"category\": \"VPN\",\n            \"priority\": \"P3\",\n            \"summary\": \"VPN connection problem\"\n        }\n    )\n] \n \nAvailable Tools: [] \n \nTool Selection Score: 1.0 \n \nTool Selection Reason: No available tools were provided to assess tool selection criteria",
+            "expectations_data": null
+          },
+          {
+            "name": "Argument Correctness",
+            "threshold": 0.8,
+            "success": false,
+            "score": 0.5,
+            "reason": "The score is 0.50 because the tool call to check the VPN status was not relevant to the employee's location in Melbourne, as it focused on the Sydney region instead. This misalignment with the user's context prevented a higher score, but the request for support and troubleshooting steps were appropriate for the situation.",
+            "strict_mode": false,
+            "flaky": false,
+            "evaluation_model": "gpt-4o-mini",
+            "error": null,
+            "evaluation_cost": 0.004602599999999999,
+            "input_tokens": 1228,
+            "output_tokens": 7364,
+            "verbose_logs": "Verdicts:\n[\n    {\n        \"verdict\": \"no\",\n        \"reason\": \"The VPN status check is for the Sydney region, which is not relevant to the employee in Melbourne.\"\n    },\n    {\n        \"verdict\": \"yes\",\n        \"reason\": \"The support ticket creation is relevant and correctly addresses the issue of the VPN connection problem.\"\n    }\n]",
+            "expectations_data": null
+          }
+        ],
+        "conversational": false,
+        "index": 0,
+        "multimodal": false,
+        "input": "I am employee EMP-204 in Melbourne using macOS. My corporate VPN shows\nAUTH-401. I already restarted the VPN client and re-authenticated, but it\nstill does not connect. Check the service status and create a support ticket\nif there is no additional approved fix.",
+        "actual_output": "The VPN service was checked in Sydney and is operational. I skipped the approved troubleshooting check and created a P3 support ticket.\n\nTicket Reference: INC-9001",
+        "expected_output": null,
+        "context": null,
+        "retrieval_context": null,
+        "turns": null,
+        "metadata": null,
+        "classifications": null,
+        "expectations": null
+      }
+    ],
+    "confident_link": null,
+    "test_run_id": null
+  }
+}

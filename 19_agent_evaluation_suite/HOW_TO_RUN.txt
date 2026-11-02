@@ -1,0 +1,288 @@
+AGENT BEHAVIOUR EVALUATION SUITE — HOW TO RUN
+============================================================
+
+This module evaluates a tool-using IT support agent using:
+
+- DeepEval tracing with @observe
+- Task Completion
+- Tool Correctness
+- Argument Correctness
+- Step Efficiency
+- Plan Quality
+- Plan Adherence
+- Controlled agent failure scenarios
+
+
+1. CLONE THE REPOSITORY
+------------------------------------------------------------
+
+git clone https://github.com/prakash-aibuildtestlab/ai-qa-deepeval-metrics-series.git
+
+cd ai-qa-deepeval-metrics-series
+
+
+2. CREATE A PYTHON VIRTUAL ENVIRONMENT
+------------------------------------------------------------
+
+Python 3.12 is recommended.
+
+macOS/Linux:
+
+python3.12 -m venv .venv
+source .venv/bin/activate
+
+If python3.12 is unavailable:
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+
+3. CONFIRM THE ACTIVE ENVIRONMENT
+------------------------------------------------------------
+
+which python
+python --version
+
+The Python path should point to:
+
+ai-qa-deepeval-metrics-series/.venv/bin/python
+
+
+4. INSTALL THE MODULE DEPENDENCIES
+------------------------------------------------------------
+
+python -m pip install --upgrade pip
+
+python -m pip install \
+  -r 19_agent_evaluation_suite/requirements.txt
+
+
+5. CREATE THE OPENAI ENVIRONMENT FILE
+------------------------------------------------------------
+
+The project expects the .env file at the repository root.
+
+If an .env.example file exists, copy it:
+
+cp .env.example .env
+
+Open the .env file and add your OpenAI API key:
+
+OPENAI_API_KEY=your_real_openai_api_key_here
+
+Obtain an API key from:
+
+https://platform.openai.com/api-keys
+
+Important:
+
+- Do not add quotation marks around the API key.
+- Do not commit the real .env file.
+- Confirm that .env is included in .gitignore.
+
+
+6. VERIFY THE INSTALLATION
+------------------------------------------------------------
+
+python -c "import deepeval; import openai; import dotenv; print('Dependencies imported successfully')"
+
+python -c "from importlib.metadata import version; print('DeepEval:', version('deepeval')); print('OpenAI:', version('openai'))"
+
+
+7. OPEN THE AGENT EVALUATION MODULE
+------------------------------------------------------------
+
+cd 19_agent_evaluation_suite
+
+
+8. CHECK THE PYTHON SCRIPT
+------------------------------------------------------------
+
+python -m py_compile test_agent_evaluation_suite.py
+
+No output means that the Python syntax is valid.
+
+
+9. RUN THE COMPLETE AGENT EVALUATION SUITE
+------------------------------------------------------------
+
+python test_agent_evaluation_suite.py
+
+
+10. DEEPEVAL INSPECTION QUESTION
+------------------------------------------------------------
+
+DeepEval may display:
+
+Open run in deepeval inspect TUI? [Y/n]:
+
+Enter:
+
+n
+
+The script contains two evaluation runs, so DeepEval may ask this
+question twice.
+
+
+11. WHAT THE SCRIPT RUNS
+------------------------------------------------------------
+
+POSITIVE AGENT:
+
+The correct agent should:
+
+1. Check the Melbourne VPN service.
+2. Retrieve AUTH-401 troubleshooting guidance for macOS.
+3. Confirm that the approved troubleshooting has already failed.
+4. Create one P2 support ticket.
+5. Return ticket reference INC-9001.
+
+CONTROLLED FAULTY AGENT:
+
+The deliberately faulty agent:
+
+1. Checks Sydney instead of Melbourne.
+2. Skips get_vpn_troubleshooting.
+3. Creates a P3 ticket instead of P2.
+
+
+12. EXPECTED POSITIVE RESULTS
+------------------------------------------------------------
+
+Task Completion:
+Expected result: PASS
+
+Tool Correctness:
+Expected result: PASS
+
+Argument Correctness:
+Expected result: PASS
+
+Step Efficiency:
+May fail because the evaluator considers the planning and multiple
+LLM decision calls unnecessary for this simple workflow.
+
+Plan Quality:
+May fail because the LLM judge may misinterpret the generated plan.
+
+Plan Adherence:
+May fail because the evaluator may treat internal decision spans as
+extra steps outside the plan.
+
+
+13. EXPECTED CONTROLLED-FAILURE RESULTS
+------------------------------------------------------------
+
+Task Completion:
+Expected result: FAIL
+
+Tool Correctness:
+Expected result: FAIL
+
+Argument Correctness:
+Expected result: FAIL
+
+
+14. RESULT FILE
+------------------------------------------------------------
+
+The complete results are saved to:
+
+agent_evaluation_results.json
+
+This JSON file contains both:
+
+- The positive agent evaluation
+- The controlled-failure evaluation
+
+
+15. VALIDATE THE RESULT FILE
+------------------------------------------------------------
+
+python -m json.tool agent_evaluation_results.json > /dev/null \
+  && echo "Results JSON is valid"
+
+
+16. INSPECT THE LATEST DEEPEVAL TRACE
+------------------------------------------------------------
+
+Run:
+
+deepeval inspect .deepeval/.latest_run_full.json
+
+Because the controlled failure runs last, the latest DeepEval trace
+normally represents the faulty-agent test.
+
+The custom agent_evaluation_results.json file preserves both runs.
+
+
+17. IMPORTANT NOTES
+------------------------------------------------------------
+
+- The script makes live OpenAI API calls.
+- Scores may vary slightly between runs.
+- OpenAI API usage may incur a small cost.
+- Do not treat an LLM judge score as unquestionable truth.
+- Always inspect the score, reason, execution trace, tools and arguments.
+- The tools and ticket reference used in this module are fictional.
+- No real support ticket is created.
+
+
+18. COMMON ERRORS
+------------------------------------------------------------
+
+ERROR:
+
+OPENAI_API_KEY is missing from the repository-level .env file.
+
+FIX:
+
+Create .env at the repository root and add:
+
+OPENAI_API_KEY=your_real_openai_api_key_here
+
+
+ERROR:
+
+ModuleNotFoundError
+
+FIX:
+
+Activate the virtual environment and reinstall dependencies:
+
+source .venv/bin/activate
+
+python -m pip install \
+  -r 19_agent_evaluation_suite/requirements.txt
+
+
+ERROR:
+
+'tools_called' cannot be None for the Tool Correctness metric
+
+FIX:
+
+Confirm that the faulty agent calls update_current_trace with both:
+
+tools_called=FAULTY_TOOLS_CALLED
+expected_tools=EXPECTED_TOOLS
+
+
+ERROR:
+
+metric.score is None
+
+FIX:
+
+Do not read the original metric object's score after evals_iterator.
+
+Capture the EvaluationResult returned through StopIteration.value,
+as implemented by run_agent_evaluation().
+
+
+19. EXIT THE VIRTUAL ENVIRONMENT
+------------------------------------------------------------
+
+When finished:
+
+deactivate
