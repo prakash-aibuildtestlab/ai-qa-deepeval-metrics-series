@@ -1,0 +1,98 @@
+{
+  "suite": "Multi-Turn Conversation Evaluation Suite",
+  "application": "Digital Parcel Support Chatbot",
+  "model": "gpt-4o-mini",
+  "total_tests": 8,
+  "expectations_met": 8,
+  "unexpected_results": 0,
+  "results": [
+    {
+      "test_id": "CONV01",
+      "scenario": "Correct retention of customer and replacement details",
+      "metric": "Knowledge Retention",
+      "score": 1.0,
+      "threshold": 0.8,
+      "actual_result": "PASS",
+      "expected_result": "PASS",
+      "expectation_met": true,
+      "reason": "The score is 1.00 because there were no instances of forgetfulness or attrition noted in the conversation, indicating complete retention of knowledge."
+    },
+    {
+      "test_id": "CONV02",
+      "scenario": "Relevant responses throughout the parcel conversation",
+      "metric": "Turn Relevancy",
+      "score": 1.0,
+      "threshold": 0.8,
+      "actual_result": "PASS",
+      "expected_result": "PASS",
+      "expectation_met": true,
+      "reason": "The score is 1.0 because there are no irrelevancies identified in the assistant messages, indicating that all responses were relevant to the user messages."
+    },
+    {
+      "test_id": "CONV03",
+      "scenario": "All valid customer intentions completed",
+      "metric": "Conversation Completeness",
+      "score": 1.0,
+      "threshold": 0.8,
+      "actual_result": "PASS",
+      "expected_result": "PASS",
+      "expectation_met": true,
+      "reason": "The score is 1.0 because all user intentions are fully addressed. The LLM response effectively assists the user by providing detailed order information, updates on the delayed parcel status, options for resolution, and confirmation of the replacement request along with a case reference."
+    },
+    {
+      "test_id": "CONV04",
+      "scenario": "Chatbot refuses an unrelated wedding-speech request",
+      "metric": "Role Adherence",
+      "score": 1.0,
+      "threshold": 0.8,
+      "actual_result": "PASS",
+      "expected_result": "PASS",
+      "expectation_met": true,
+      "reason": "The score is 1.0 because there are no out of character responses from the LLM chatbot. All responses adhered to the role of a parcel-delivery customer-support assistant, effectively addressing inquiries related to parcel tracking, delivery delays, replacements, refunds, and escalations without deviating into unrelated topics."
+    },
+    {
+      "test_id": "CONV05",
+      "scenario": "Chatbot remembers an incorrect replacement address",
+      "metric": "Knowledge Retention",
+      "score": 0.5,
+      "threshold": 0.8,
+      "actual_result": "FAIL",
+      "expected_result": "FAIL",
+      "expectation_met": true,
+      "reason": "The score is 0.50 because the LLM demonstrated forgetfulness by incorrectly stating the replacement address as 18 Collins Street instead of the known address 55 Bourke Street, indicating a significant lapse in retaining previously established knowledge."
+    },
+    {
+      "test_id": "CONV06",
+      "scenario": "Chatbot gives an unrelated response to a parcel question",
+      "metric": "Turn Relevancy",
+      "score": 0.5,
+      "threshold": 0.8,
+      "actual_result": "FAIL",
+      "expected_result": "FAIL",
+      "expectation_met": true,
+      "reason": "The score is 0.5 because the assistant's message number 2 discusses a wedding, which is completely irrelevant to the user's inquiry about resolution options for the delayed order."
+    },
+    {
+      "test_id": "CONV07",
+      "scenario": "Chatbot leaves multiple customer intentions incomplete",
+      "metric": "Conversation Completeness",
+      "score": 0.0,
+      "threshold": 0.8,
+      "actual_result": "FAIL",
+      "expected_result": "FAIL",
+      "expectation_met": true,
+      "reason": "The score is 0.0 because the LLM response fails to address any of the user's intentions regarding their delayed order, replacement request, confirmation of the replacement, and case reference number. The vague response about the delay does not provide the necessary details or confirmations, leaving the user without the information they sought."
+    },
+    {
+      "test_id": "CONV08",
+      "scenario": "Parcel chatbot complies with a wedding-speech request",
+      "metric": "Role Adherence",
+      "score": 0.0,
+      "threshold": 0.8,
+      "actual_result": "FAIL",
+      "expected_result": "FAIL",
+      "expectation_met": true,
+      "reason": "The score is 0.0 because the LLM chatbot response in turn #2, 'Of course! Ladies and gentlemen, we are gathered here today because my brother finally found someone willing to tolerate his terrible jokes forever,' is completely unrelated to its role as a parcel-delivery customer-support assistant. This response does not address any customer inquiries regarding parcel tracking, delivery delays, replacements, refunds, or escalations, and instead engages in a wedding speech, which is outside the scope of its responsibilities."
+    }
+  ]
+}
