@@ -1,0 +1,224 @@
+HOW TO RUN — EVALUATION STRATEGY SUITE
+======================================
+
+PURPOSE
+
+This module compares a baseline parcel-support chatbot configuration
+(Version A) with a compressed candidate configuration (Version B).
+
+It evaluates:
+
+- Risk-based metric selection
+- Prompt/configuration regression
+- Human-metric agreement
+- Safety and privacy quality gates
+- Critical regressions
+- Final RELEASE or BLOCK decision
+
+
+TESTED ENVIRONMENT
+
+Python: 3.12
+DeepEval: 4.3.2
+OpenAI: 3.3.0
+python-dotenv: 1.2.4
+
+
+1. OPEN THE REPOSITORY ROOT
+
+cd /path/to/ai-qa-deepeval-metrics-series
+
+
+2. CREATE A VIRTUAL ENVIRONMENT
+
+python3.12 -m venv .venv
+
+
+3. ACTIVATE THE ENVIRONMENT
+
+macOS or Linux:
+
+source .venv/bin/activate
+
+Windows PowerShell:
+
+.venv\Scripts\Activate.ps1
+
+
+4. INSTALL DEPENDENCIES
+
+python -m pip install --upgrade pip
+
+python -m pip install \
+  -r 21_evaluation_strategy_suite/requirements.txt
+
+
+5. CONFIGURE THE OPENAI API KEY
+
+Create a .env file in the repository root.
+
+OPENAI_API_KEY=your_openai_api_key_here
+
+Optional model configuration:
+
+OPENAI_MODEL=gpt-4o-mini
+JUDGE_MODEL=gpt-4o-mini
+
+Do not commit the real .env file or API key.
+
+
+6. ENTER THE MODULE
+
+cd 21_evaluation_strategy_suite
+
+
+7. VERIFY THE SOURCE FILES
+
+python -m json.tool evaluation_dataset.json > /dev/null \
+  && echo "Evaluation dataset is valid"
+
+python -m json.tool human_review_labels.json > /dev/null \
+  && echo "Human-review labels are valid"
+
+python -m json.tool metric_selection_matrix.json > /dev/null \
+  && echo "Metric-selection matrix is valid"
+
+python -m py_compile generate_outputs.py
+python -m py_compile test_evaluation_strategy.py
+
+
+8. RUN THE PUBLISHED EVALUATION
+
+The repository contains:
+
+- generated_outputs.json
+- human_review_labels.json
+
+These files preserve the outputs and human decisions used for the
+published evaluation.
+
+To reproduce the metric and release-gate evaluation without generating
+new application responses:
+
+python test_evaluation_strategy.py
+
+
+9. GENERATE NEW VERSION A AND VERSION B OUTPUTS
+
+To create a fresh comparison:
+
+python generate_outputs.py
+
+This makes 16 application-model calls:
+
+- 8 Version A responses
+- 8 Version B responses
+
+The new responses overwrite generated_outputs.json.
+
+
+10. IMPORTANT — REVIEW NEW OUTPUTS BEFORE EVALUATING
+
+LLM responses may change between runs.
+
+After generating new outputs:
+
+1. Open generated_outputs.json.
+2. Review Version A and Version B independently.
+3. Compare each response with:
+   - evaluation_dataset.json
+   - parcel_support_policy.txt
+4. Update human_review_labels.json.
+5. Do not view the automated metric scores before completing the
+   human review.
+6. Only then run:
+
+python test_evaluation_strategy.py
+
+Do not reuse old human labels blindly with newly generated outputs.
+
+
+11. EXPECTED PUBLISHED RESULT
+
+Version A baseline:
+
+- Overall pass rate: 100%
+- Critical pass rate: 100%
+- Safety/privacy pass rate: 100%
+- Human-metric agreement: 100%
+
+Version B candidate:
+
+- Overall pass rate: 62.5%
+- Critical pass rate: 66.7%
+- Safety/privacy pass rate: 75%
+- Human-metric agreement: 100%
+
+Detected regressions:
+
+- STRATEGY-002 — Incomplete five-day eligibility response
+- STRATEGY-003 — Incorrect four-day eligibility decision
+- STRATEGY-004 — Verification bypass
+
+Critical regression:
+
+- STRATEGY-004
+
+Final release decision:
+
+BLOCK
+
+
+12. RESULTS
+
+Detailed results are written to:
+
+evaluation_strategy_results.json
+
+
+13. DIAGNOSTIC METRICS
+
+Some metrics remain visible but do not control the release verdict.
+
+PIILeakageMetric:
+
+- Produced false-positive failures for safe refusals.
+- Retained as diagnostic evidence.
+- Deterministic seeded-PII detection controls the test verdict.
+
+Eligibility G-Eval:
+
+- Produced borderline variable scores on a correct response.
+- Retained as diagnostic evidence.
+- The exact five-day policy rule is enforced deterministically.
+
+
+14. COST AND VARIABILITY
+
+This suite makes multiple OpenAI calls.
+
+Costs depend on:
+
+- Application model
+- Judge model
+- Number of test cases
+- Number of selected metrics
+- Response length
+
+LLM-based scores may vary between runs.
+
+Deterministic checks should be preferred for exact business rules.
+LLM judges should be calibrated against human-reviewed examples.
+
+
+15. SECURITY
+
+Never commit:
+
+- .env
+- API keys
+- Real customer information
+- Real payment-card information
+
+All names, addresses, email addresses, card numbers, orders and case
+references in this module are fictional test data.
