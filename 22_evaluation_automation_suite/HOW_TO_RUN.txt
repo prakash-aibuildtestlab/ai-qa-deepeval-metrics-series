@@ -1,0 +1,337 @@
+AI EVALUATION AUTOMATION SUITE
+==============================
+
+This module demonstrates how to organise AI evaluation tests into smoke,
+critical, safety and regression suites using pytest markers.
+
+It also demonstrates:
+
+- Deterministic AI-output validation
+- Approved-baseline comparison
+- Controlled regression detection
+- Machine-readable pytest reports
+- Release-gate summaries
+- CI-compatible exit codes
+
+
+1. PREREQUISITES
+----------------
+
+Recommended:
+
+- Python 3.12 or later
+- pip
+- A terminal
+- Repository downloaded or cloned locally
+
+The deterministic test suites do not require an OpenAI API key.
+
+
+2. OPEN THE MODULE
+------------------
+
+From the repository root:
+
+cd 22_evaluation_automation_suite
+
+
+3. CREATE A VIRTUAL ENVIRONMENT
+-------------------------------
+
+If the repository virtual environment is not already active:
+
+python3.12 -m venv .venv
+source .venv/bin/activate
+
+If using the shared virtual environment from the repository root:
+
+source ../.venv/bin/activate
+
+
+4. INSTALL DEPENDENCIES
+-----------------------
+
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+Check installed dependencies:
+
+python -m pip check
+
+
+5. VERIFY THE TEST MARKERS
+--------------------------
+
+pytest --markers
+
+The module defines these suite markers:
+
+- smoke
+- critical
+- safety
+- regression
+- semantic
+- deterministic
+- diagnostic
+
+
+6. RUN THE SMOKE SUITE
+----------------------
+
+The smoke suite performs fast checks of essential chatbot behaviour.
+
+pytest -m smoke -v
+
+Expected result:
+
+4 passed
+
+
+7. RUN THE CRITICAL SUITE
+-------------------------
+
+The critical suite checks release-blocking business and verification rules.
+
+pytest -m critical -v
+
+Expected result:
+
+4 passed
+
+
+8. RUN THE SAFETY SUITE
+-----------------------
+
+The safety suite checks privacy, unsupported actions and role boundaries.
+
+pytest -m safety -v
+
+Expected result:
+
+4 passed
+
+
+9. RUN THE REGRESSION SUITE
+---------------------------
+
+The regression suite compares all current results with the approved
+baseline.
+
+pytest -m regression -v
+
+Expected result:
+
+8 passed
+
+
+10. RUN THE COMPLETE COLLECTION
+-------------------------------
+
+pytest -v
+
+Expected result:
+
+20 passed
+
+The total is 20 because some business cases intentionally belong to more
+than one operational suite.
+
+For example, a privacy-verification test can belong to:
+
+- Smoke
+- Critical
+- Safety
+- Regression
+
+
+11. GENERATE A PYTEST JSON REPORT
+---------------------------------
+
+Create the reports directory:
+
+mkdir -p reports
+
+Run the regression suite and save the detailed pytest report:
+
+pytest -m regression -q \
+  --json-report \
+  --json-report-file=reports/regression_report.json
+
+Validate the JSON:
+
+python -m json.tool reports/regression_report.json > /dev/null \
+  && echo "Regression report is valid JSON"
+
+
+12. GENERATE THE RELEASE-GATE SUMMARY
+-------------------------------------
+
+python generate_report.py
+
+Expected result:
+
+Total tests: 8
+Passed: 8
+Failed: 0
+Errors: 0
+Pass rate: 100.00%
+Release gate: PASS
+
+The expected process exit code is 0.
+
+Check it immediately after running the script:
+
+echo "Report gate exit code: $?"
+
+
+13. RUN THE CONTROLLED REGRESSION
+---------------------------------
+
+The controlled regression deliberately supplies an unsafe response for
+AUTO-004.
+
+Run:
+
+EVALUATION_OUTPUTS_FILE=controlled_regression_outputs.json \
+pytest -m regression -v
+
+Expected result:
+
+- 7 tests pass
+- AUTO-004 fails
+- pytest returns exit code 1
+
+Check the exit code immediately:
+
+echo "Pytest exit code: $?"
+
+This is an expected failure. It proves that the quality gate can detect an
+unsafe behavioural regression.
+
+
+14. GENERATE A CONTROLLED FAILURE REPORT
+----------------------------------------
+
+Run the controlled regression and save its report:
+
+EVALUATION_OUTPUTS_FILE=controlled_regression_outputs.json \
+pytest -m regression -q \
+  --json-report \
+  --json-report-file=reports/controlled_regression_report.json
+
+Store the pytest exit code:
+
+PYTEST_EXIT=$?
+
+Generate the release-gate summary:
+
+python generate_report.py \
+  --input reports/controlled_regression_report.json \
+  --output reports/controlled_evaluation_summary.json
+
+Store the report exit code:
+
+REPORT_EXIT=$?
+
+Display both exit codes:
+
+echo "Pytest exit code: $PYTEST_EXIT"
+echo "Report gate exit code: $REPORT_EXIT"
+
+Expected result:
+
+Total tests: 8
+Passed: 7
+Failed: 1
+Pass rate: 87.50%
+Release gate: BLOCK
+
+Pytest exit code: 1
+Report gate exit code: 1
+
+
+15. RETURN TO THE NORMAL GREEN SUITE
+------------------------------------
+
+The EVALUATION_OUTPUTS_FILE value applies only to the command where it is
+declared.
+
+Run the normal regression suite again:
+
+pytest -m regression -v
+
+Expected result:
+
+8 passed
+
+
+16. COMPILE-CHECK THE PYTHON FILES
+----------------------------------
+
+python -m py_compile \
+  conftest.py \
+  evaluation_helpers.py \
+  generate_report.py \
+  test_smoke_suite.py \
+  test_critical_suite.py \
+  test_safety_suite.py \
+  test_regression_suite.py
+
+
+17. IMPORTANT PORTFOLIO NOTE
+----------------------------
+
+The approved baseline in this module is a simulated portfolio baseline
+derived from the parcel-support policy.
+
+In a production project:
+
+- Business analysts and subject-matter experts would review the outputs.
+- Approved outputs and verdicts would be version controlled.
+- Candidate model or prompt outputs would be generated separately.
+- Regression results would be compared with the approved baseline.
+- Critical or safety regressions would block deployment.
+- Reports would be stored as CI/CD pipeline artifacts.
+
+
+18. KEY FILES
+-------------
+
+evaluation_cases.json
+    Test inputs, expected behaviour and deterministic rules.
+
+approved_baseline.json
+    Approved expected verdict for each test case.
+
+controlled_regression_outputs.json
+    Deliberately unsafe output used to prove regression detection.
+
+evaluation_helpers.py
+    Shared deterministic evaluation functions.
+
+test_smoke_suite.py
+    Fast essential-behaviour checks.
+
+test_critical_suite.py
+    Release-blocking policy checks.
+
+test_safety_suite.py
+    Privacy, safety and role-boundary checks.
+
+test_regression_suite.py
+    Full baseline comparison and optional candidate-output support.
+
+generate_report.py
+    Converts pytest JSON evidence into a release-gate summary.
+
+reports/regression_report.json
+    Detailed green pytest execution report.
+
+reports/evaluation_summary.json
+    Concise green release-gate decision.
+
+reports/controlled_regression_report.json
+    Detailed controlled-failure execution report.
+
+reports/controlled_evaluation_summary.json
+    Concise blocked release-gate decision.

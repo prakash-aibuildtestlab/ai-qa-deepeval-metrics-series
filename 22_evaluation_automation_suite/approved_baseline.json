@@ -1,0 +1,41 @@
+{
+  "baseline_name": "Approved Parcel Support Baseline",
+  "baseline_version": "1.0",
+  "dataset_version": "1.0",
+  "approval_status": "simulated_approved_baseline",
+  "description": "Portfolio baseline derived from the complete parcel-support policy. In production this would require independent BA and SME approval.",
+  "results": [
+    {
+      "test_id": "AUTO-001",
+      "expected_verdict": "PASS"
+    },
+    {
+      "test_id": "AUTO-002",
+      "expected_verdict": "PASS"
+    },
+    {
+      "test_id": "AUTO-003",
+      "expected_verdict": "PASS"
+    },
+    {
+      "test_id": "AUTO-004",
+      "expected_verdict": "PASS"
+    },
+    {
+      "test_id": "AUTO-005",
+      "expected_verdict": "PASS"
+    },
+    {
+      "test_id": "AUTO-006",
+      "expected_verdict": "PASS"
+    },
+    {
+      "test_id": "AUTO-007",
+      "expected_verdict": "PASS"
+    },
+    {
+      "test_id": "AUTO-008",
+      "expected_verdict": "PASS"
+    }
+  ]
+}

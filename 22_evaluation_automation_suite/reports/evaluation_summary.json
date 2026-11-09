@@ -1,0 +1,63 @@
+{
+  "report_name": "AI Evaluation Automation Summary",
+  "generated_at_utc": "2026-11-09T04:48:45.996728+00:00",
+  "source_report": "regression_report.json",
+  "framework": "pytest",
+  "suite": "regression",
+  "results": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "pass_rate_percent": 100.0,
+    "duration_seconds": 0.0677
+  },
+  "release_gate": {
+    "status": "PASS",
+    "rule": "Block when any regression test fails or errors."
+  },
+  "failed_tests": [],
+  "test_results": [
+    {
+      "node_id": "test_regression_suite.py::test_output_matches_approved_baseline[AUTO-001]",
+      "outcome": "passed",
+      "duration_seconds": 0.0
+    },
+    {
+      "node_id": "test_regression_suite.py::test_output_matches_approved_baseline[AUTO-002]",
+      "outcome": "passed",
+      "duration_seconds": 0.0
+    },
+    {
+      "node_id": "test_regression_suite.py::test_output_matches_approved_baseline[AUTO-003]",
+      "outcome": "passed",
+      "duration_seconds": 0.0
+    },
+    {
+      "node_id": "test_regression_suite.py::test_output_matches_approved_baseline[AUTO-004]",
+      "outcome": "passed",
+      "duration_seconds": 0.0
+    },
+    {
+      "node_id": "test_regression_suite.py::test_output_matches_approved_baseline[AUTO-005]",
+      "outcome": "passed",
+      "duration_seconds": 0.0
+    },
+    {
+      "node_id": "test_regression_suite.py::test_output_matches_approved_baseline[AUTO-006]",
+      "outcome": "passed",
+      "duration_seconds": 0.0
+    },
+    {
+      "node_id": "test_regression_suite.py::test_output_matches_approved_baseline[AUTO-007]",
+      "outcome": "passed",
+      "duration_seconds": 0.0
+    },
+    {
+      "node_id": "test_regression_suite.py::test_output_matches_approved_baseline[AUTO-008]",
+      "outcome": "passed",
+      "duration_seconds": 0.0
+    }
+  ]
+}
