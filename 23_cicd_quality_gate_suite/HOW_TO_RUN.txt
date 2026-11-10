@@ -1,0 +1,416 @@
+AI EVALUATION CI/CD QUALITY GATE
+================================
+
+This module runs the automated evaluation suites from:
+
+22_evaluation_automation_suite
+
+It generates machine-readable reports and applies a final release decision.
+
+Release decisions:
+
+- PASS  -> exit code 0
+- BLOCK -> exit code 1
+- Configuration error -> exit code 2
+
+
+1. PREREQUISITES
+----------------
+
+Recommended:
+
+- Python 3.12
+- Git
+- GitHub repository
+- GitHub Actions enabled
+
+Check Python:
+
+python --version
+
+Check the active Python environment:
+
+which python
+
+
+2. GO TO THE REPOSITORY ROOT
+----------------------------
+
+cd /Users/prakashganji/Desktop/ai-qa-deepeval-metrics-series
+
+Confirm:
+
+pwd
+
+
+3. ACTIVATE THE VIRTUAL ENVIRONMENT
+----------------------------------
+
+source .venv/bin/activate
+
+Confirm:
+
+which python
+python --version
+
+
+4. INSTALL DEPENDENCIES
+-----------------------
+
+python -m pip install \
+  -r 23_cicd_quality_gate_suite/requirements.txt
+
+Check installed packages:
+
+python -m pip check
+
+
+5. VALIDATE THE QUALITY-GATE FILES
+----------------------------------
+
+Validate the JSON configuration:
+
+python -m json.tool \
+  23_cicd_quality_gate_suite/quality_gate_config.json \
+  > /dev/null
+
+Compile the Python files:
+
+python -m py_compile \
+  23_cicd_quality_gate_suite/generate_ci_summary.py \
+  23_cicd_quality_gate_suite/test_ci_quality_gate.py
+
+
+6. TEST THE QUALITY-GATE LOGIC
+------------------------------
+
+Run:
+
+python -m pytest \
+  23_cicd_quality_gate_suite/test_ci_quality_gate.py \
+  -v
+
+Expected result:
+
+8 passed
+
+These tests validate the gate itself.
+
+They confirm that:
+
+- A complete passing report is accepted.
+- A partial pass is blocked.
+- A missing report is blocked.
+- A pytest error is blocked.
+- A zero-test report is blocked.
+- Every release stage requires a 100% pass rate.
+
+
+7. CREATE THE REPORT DIRECTORY
+------------------------------
+
+mkdir -p 23_cicd_quality_gate_suite/reports
+
+
+8. RUN THE SMOKE SUITE
+----------------------
+
+python -m pytest \
+  22_evaluation_automation_suite \
+  -m smoke \
+  --json-report \
+  --json-report-file=23_cicd_quality_gate_suite/reports/smoke_results.json \
+  -q
+
+Expected selected tests:
+
+4 passed
+
+
+9. RUN THE CRITICAL SUITE
+-------------------------
+
+python -m pytest \
+  22_evaluation_automation_suite \
+  -m critical \
+  --json-report \
+  --json-report-file=23_cicd_quality_gate_suite/reports/critical_results.json \
+  -q
+
+Expected selected tests:
+
+4 passed
+
+
+10. RUN THE SAFETY SUITE
+------------------------
+
+python -m pytest \
+  22_evaluation_automation_suite \
+  -m safety \
+  --json-report \
+  --json-report-file=23_cicd_quality_gate_suite/reports/safety_results.json \
+  -q
+
+Expected selected tests:
+
+4 passed
+
+
+11. RUN THE REGRESSION SUITE
+----------------------------
+
+python -m pytest \
+  22_evaluation_automation_suite \
+  -m regression \
+  --json-report \
+  --json-report-file=23_cicd_quality_gate_suite/reports/regression_results.json \
+  -q
+
+Expected selected tests:
+
+8 passed
+
+
+12. APPLY THE FINAL RELEASE GATE
+--------------------------------
+
+Run:
+
+python \
+  23_cicd_quality_gate_suite/generate_ci_summary.py
+
+Immediately capture the exit code:
+
+gate_exit_code=$?
+
+echo "Quality-gate exit code: $gate_exit_code"
+
+Expected passing result:
+
+SMOKE       Tests: 4   Passed: 4   Failed: 0   Result: PASS
+CRITICAL    Tests: 4   Passed: 4   Failed: 0   Result: PASS
+SAFETY      Tests: 4   Passed: 4   Failed: 0   Result: PASS
+REGRESSION  Tests: 8   Passed: 8   Failed: 0   Result: PASS
+
+Release gate: PASS
+Quality-gate exit code: 0
+
+
+13. VALIDATE THE GENERATED SUMMARY
+----------------------------------
+
+python -m json.tool \
+  23_cicd_quality_gate_suite/reports/ci_quality_gate_summary.json \
+  > /dev/null
+
+View the GitHub-style summary:
+
+cat \
+  23_cicd_quality_gate_suite/reports/github_step_summary.md
+
+
+14. CONTROLLED MISSING-REPORT TEST
+----------------------------------
+
+This optional test proves that the gate fails closed.
+
+Temporarily move the critical report:
+
+mv \
+  23_cicd_quality_gate_suite/reports/critical_results.json \
+  23_cicd_quality_gate_suite/reports/critical_results.json.backup
+
+Run the gate:
+
+python \
+  23_cicd_quality_gate_suite/generate_ci_summary.py
+
+echo "Controlled gate exit code: $?"
+
+Expected result:
+
+Release gate: BLOCK
+Exit code: 1
+
+Reason:
+
+Pytest JSON report was not found.
+
+Restore the critical report:
+
+mv \
+  23_cicd_quality_gate_suite/reports/critical_results.json.backup \
+  23_cicd_quality_gate_suite/reports/critical_results.json
+
+Regenerate the passing summary:
+
+python \
+  23_cicd_quality_gate_suite/generate_ci_summary.py
+
+
+15. GITHUB ACTIONS WORKFLOW
+---------------------------
+
+The workflow is stored at:
+
+.github/workflows/ai-evaluation-quality-gate.yml
+
+It runs when:
+
+- A pull request changes Module 22.
+- A pull request changes Module 23.
+- The workflow file changes.
+- A change is pushed to main.
+- The workflow is started manually.
+
+
+16. PUSH THE WORKFLOW TO GITHUB
+-------------------------------
+
+Create a feature branch:
+
+git switch -c feature/ai-evaluation-quality-gate
+
+Stage the files:
+
+git add .github/workflows/ai-evaluation-quality-gate.yml
+git add 23_cicd_quality_gate_suite
+
+Check the staged files:
+
+git diff --cached --name-only
+git diff --cached --check
+
+Commit:
+
+git commit -m "Add AI evaluation CI quality gate"
+
+Push:
+
+git push -u origin feature/ai-evaluation-quality-gate
+
+
+17. CREATE A PULL REQUEST
+-------------------------
+
+Open the GitHub repository.
+
+Create a pull request from:
+
+feature/ai-evaluation-quality-gate
+
+into:
+
+main
+
+The workflow should start automatically.
+
+
+18. REVIEW THE GITHUB ACTIONS RESULT
+------------------------------------
+
+Open:
+
+GitHub repository
+-> Actions
+-> AI Evaluation Quality Gate
+-> AI Evaluation Release Gate
+
+Review:
+
+- Installation step
+- Quality-gate unit tests
+- Smoke suite
+- Critical suite
+- Safety suite
+- Regression suite
+- Final release gate
+- Uploaded evidence
+
+
+19. REVIEW THE STEP SUMMARY
+---------------------------
+
+Open the completed GitHub Actions run.
+
+The summary should show:
+
+- Stage totals
+- Passed tests
+- Failed tests
+- Errors
+- Pass rates
+- Required thresholds
+- Final release-gate decision
+
+
+20. DOWNLOAD THE EVALUATION ARTIFACT
+------------------------------------
+
+At the bottom of the GitHub Actions run, download:
+
+ai-evaluation-reports-<run-number>
+
+The artifact contains:
+
+- smoke_results.json
+- critical_results.json
+- safety_results.json
+- regression_results.json
+- ci_quality_gate_summary.json
+- github_step_summary.md
+
+The artifact is retained for 14 days.
+
+
+21. API KEY REQUIREMENT
+-----------------------
+
+The current CI/CD suite uses deterministic tests and approved stored outputs.
+
+OPENAI_API_KEY is not required.
+
+Do not commit a real API key to GitHub.
+
+Future LLM-judge evaluations should use:
+
+GitHub repository
+-> Settings
+-> Secrets and variables
+-> Actions
+-> New repository secret
+
+
+22. BRANCH PROTECTION
+---------------------
+
+After the workflow has completed successfully at least once, the workflow can
+be configured as a required status check.
+
+GitHub repository
+-> Settings
+-> Branches or Rules
+-> Add branch protection rule or ruleset
+-> Target branch: main
+-> Require status checks before merging
+-> Select: AI Evaluation Release Gate
+
+After this is enabled, a failed AI evaluation gate prevents the pull request
+from being merged.
+
+
+23. EXPECTED FINAL BEHAVIOUR
+----------------------------
+
+Passing evaluation:
+
+Tests -> Reports -> Summary -> PASS -> Exit code 0 -> Merge allowed
+
+Failed critical evaluation:
+
+Tests -> Reports -> Summary -> BLOCK -> Exit code 1 -> Merge blocked
+
+Missing evaluation evidence:
+
+Missing report -> BLOCK -> Exit code 1 -> Merge blocked

@@ -1,0 +1,127 @@
+name: AI Evaluation Quality Gate
+
+on:
+  pull_request:
+    paths:
+      - "22_evaluation_automation_suite/**"
+      - "23_cicd_quality_gate_suite/**"
+      - ".github/workflows/ai-evaluation-quality-gate.yml"
+
+  push:
+    branches:
+      - main
+    paths:
+      - "22_evaluation_automation_suite/**"
+      - "23_cicd_quality_gate_suite/**"
+      - ".github/workflows/ai-evaluation-quality-gate.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-evaluation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ai-evaluation-quality-gate:
+    name: AI Evaluation Release Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            23_cicd_quality_gate_suite/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            -r 23_cicd_quality_gate_suite/requirements.txt
+          python -m pip check
+
+      - name: Validate quality-gate files
+        run: |
+          python -m json.tool \
+            23_cicd_quality_gate_suite/quality_gate_config.json \
+            > /dev/null
+
+          python -m py_compile \
+            23_cicd_quality_gate_suite/generate_ci_summary.py \
+            23_cicd_quality_gate_suite/test_ci_quality_gate.py
+
+      - name: Test the quality-gate logic
+        run: |
+          python -m pytest \
+            23_cicd_quality_gate_suite/test_ci_quality_gate.py \
+            -v
+
+      - name: Create report directory
+        run: |
+          mkdir -p 23_cicd_quality_gate_suite/reports
+
+      - name: Run smoke evaluation suite
+        continue-on-error: true
+        run: |
+          python -m pytest \
+            22_evaluation_automation_suite \
+            -m smoke \
+            --json-report \
+            --json-report-file=23_cicd_quality_gate_suite/reports/smoke_results.json \
+            -q
+
+      - name: Run critical evaluation suite
+        continue-on-error: true
+        run: |
+          python -m pytest \
+            22_evaluation_automation_suite \
+            -m critical \
+            --json-report \
+            --json-report-file=23_cicd_quality_gate_suite/reports/critical_results.json \
+            -q
+
+      - name: Run safety evaluation suite
+        continue-on-error: true
+        run: |
+          python -m pytest \
+            22_evaluation_automation_suite \
+            -m safety \
+            --json-report \
+            --json-report-file=23_cicd_quality_gate_suite/reports/safety_results.json \
+            -q
+
+      - name: Run regression evaluation suite
+        continue-on-error: true
+        run: |
+          python -m pytest \
+            22_evaluation_automation_suite \
+            -m regression \
+            --json-report \
+            --json-report-file=23_cicd_quality_gate_suite/reports/regression_results.json \
+            -q
+
+      - name: Apply final AI quality gate
+        if: always()
+        run: |
+          python 23_cicd_quality_gate_suite/generate_ci_summary.py
+
+      - name: Upload evaluation evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ai-evaluation-reports-${{ github.run_number }}
+          path: 23_cicd_quality_gate_suite/reports/
+          if-no-files-found: warn
+          retention-days: 14
