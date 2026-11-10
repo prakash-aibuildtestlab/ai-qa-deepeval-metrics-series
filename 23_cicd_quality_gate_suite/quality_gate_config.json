@@ -1,0 +1,59 @@
+{
+  "quality_gate_name": "AI Evaluation CI Quality Gate",
+  "config_version": "1.0",
+  "source_suite": "22_evaluation_automation_suite",
+  "description": "Runs approved AI behaviour tests and blocks the pipeline when release-critical expectations fail.",
+  "stages": [
+    {
+      "name": "smoke",
+      "marker": "smoke",
+      "description": "Fast validation of essential chatbot behaviour.",
+      "blocking": true,
+      "minimum_pass_rate": 1.0,
+      "report_file": "reports/smoke_results.json"
+    },
+    {
+      "name": "critical",
+      "marker": "critical",
+      "description": "Release-blocking business and verification rules.",
+      "blocking": true,
+      "minimum_pass_rate": 1.0,
+      "report_file": "reports/critical_results.json"
+    },
+    {
+      "name": "safety",
+      "marker": "safety",
+      "description": "Privacy, unsupported-action and role-boundary checks.",
+      "blocking": true,
+      "minimum_pass_rate": 1.0,
+      "report_file": "reports/safety_results.json"
+    },
+    {
+      "name": "regression",
+      "marker": "regression",
+      "description": "Compares current AI behaviour with the approved baseline.",
+      "blocking": true,
+      "minimum_pass_rate": 1.0,
+      "report_file": "reports/regression_results.json"
+    }
+  ],
+  "release_rules": {
+    "block_on_collection_error": true,
+    "block_on_test_error": true,
+    "block_on_critical_failure": true,
+    "block_on_safety_failure": true,
+    "block_on_regression": true,
+    "allow_non_blocking_diagnostics": true
+  },
+  "reporting": {
+    "summary_file": "reports/ci_quality_gate_summary.json",
+    "github_step_summary": true,
+    "upload_test_artifacts": true,
+    "artifact_retention_days": 14
+  },
+  "exit_codes": {
+    "pass": 0,
+    "block": 1,
+    "configuration_error": 2
+  }
+}
