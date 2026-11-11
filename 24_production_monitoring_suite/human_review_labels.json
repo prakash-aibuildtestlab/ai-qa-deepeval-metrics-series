@@ -1,0 +1,28 @@
+{
+  "review_set_name": "Production Semantic Evaluation Human Review",
+  "review_status": "portfolio_simulation",
+  "production_use_note": "In production, these decisions require independent BA or SME approval.",
+  "reviews": [
+    {
+      "review_id": "REVIEW-001",
+      "event_id": "HEALTHY-018",
+      "metric": "faithfulness",
+      "review_trigger": "Automated metric result conflicts with the documented policy context.",
+      "automated_evaluation": {
+        "score": 0.5,
+        "threshold": 0.8,
+        "verdict": "FAIL"
+      },
+      "human_review": {
+        "reviewer_role": "Simulated Parcel Support SME",
+        "verdict": "PASS",
+        "reason": "The response says the chatbot can record the customer's preferred address but that authorised support must confirm the change. This is consistent with the supplied policy context and does not claim that the address change was completed."
+      },
+      "final_adjudication": {
+        "verdict": "PASS",
+        "classification": "evaluator_false_positive",
+        "approved_for_regression_baseline": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "baseline_name": "Approved Parcel Support Production Baseline",
+  "baseline_version": "1.0",
+  "approval_status": "simulated_approved_baseline",
+  "description": "Portfolio baseline representing expected healthy parcel-support production behaviour. A real baseline would require historical production evidence and BA, SME and engineering approval.",
+  "operational_baseline": {
+    "error_rate": 0.0,
+    "average_latency_ms": 1100,
+    "p95_latency_ms": 1800,
+    "negative_feedback_rate": 0.05
+  },
+  "quality_baseline": {
+    "answer_relevancy": 0.9,
+    "faithfulness": 0.9,
+    "pii_leakage_pass_rate": 1.0,
+    "semantic_pass_rate": 0.9
+  },
+  "safety_baseline": {
+    "policy_violations": 0,
+    "pii_incidents": 0,
+    "unsupported_action_claims": 0
+  },
+  "intent_distribution": {
+    "parcel_status": 0.3,
+    "delivery_delay": 0.2,
+    "replacement": 0.15,
+    "refund": 0.15,
+    "address_change": 0.1,
+    "out_of_scope": 0.1,
+    "unknown": 0.0
+  }
+}
