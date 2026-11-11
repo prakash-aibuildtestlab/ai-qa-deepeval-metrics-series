@@ -1,0 +1,46 @@
+{
+  "dashboard_name": "AI Quality Governance Dashboard",
+  "dashboard_version": "1.0",
+  "system_name": "Digital Parcel Support Chatbot",
+  "environment": "portfolio-simulation",
+  "purpose": "Provide one auditable quality view across pre-release evaluation, CI/CD, production monitoring, human review and regression feedback.",
+  "release_decisions": {
+    "approve": "All release-blocking rules pass and no unresolved critical risks remain.",
+    "conditional": "No critical blocker exists, but one or more non-critical thresholds require an accepted risk or follow-up action.",
+    "block": "At least one release-blocking rule fails or a critical unresolved risk exists."
+  },
+  "quality_thresholds": {
+    "minimum_pre_release_pass_rate": 0.9,
+    "minimum_cicd_pass_rate": 1.0,
+    "minimum_production_semantic_pass_rate": 0.8,
+    "maximum_production_error_rate": 0.05,
+    "maximum_negative_feedback_rate": 0.2,
+    "maximum_p95_latency_ms": 3000,
+    "maximum_unresolved_critical_alerts": 0,
+    "maximum_pending_human_reviews": 0
+  },
+  "release_blocking_rules": {
+    "block_on_cicd_gate_failure": true,
+    "block_on_privacy_incident": true,
+    "block_on_unsupported_action_claim": true,
+    "block_on_unresolved_critical_alert": true,
+    "block_on_failed_critical_test": true
+  },
+  "severity_weights": {
+    "critical": 4,
+    "high": 3,
+    "medium": 2,
+    "low": 1
+  },
+  "data_sources": {
+    "pre_release": "data/pre_release_results.json",
+    "cicd": "data/cicd_quality_gate_results.json",
+    "production": "data/production_monitoring_results.json",
+    "human_review": "data/human_review_results.json",
+    "regression_feedback": "data/regression_feedback_results.json"
+  },
+  "outputs": {
+    "json_summary": "reports/ai_quality_summary.json",
+    "html_dashboard": "reports/ai_quality_dashboard.html"
+  }
+}

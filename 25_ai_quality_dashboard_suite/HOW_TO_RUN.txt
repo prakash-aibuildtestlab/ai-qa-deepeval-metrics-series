@@ -1,0 +1,276 @@
+AI QUALITY DASHBOARD AND GOVERNANCE SUITE
+=========================================
+
+This module consolidates pre-release evaluation, CI/CD results,
+production monitoring, human review and regression feedback into one
+AI quality governance decision.
+
+Possible decisions:
+
+- APPROVE
+- CONDITIONAL
+- BLOCK
+
+
+1. PREREQUISITES
+----------------
+
+Recommended:
+
+- Python 3.12 or later
+- Active project virtual environment
+- pip
+
+Confirm Python:
+
+python --version
+
+
+2. INSTALL DEPENDENCIES
+-----------------------
+
+From the 25_ai_quality_dashboard_suite directory:
+
+python -m pip install -r requirements.txt
+
+
+3. VALIDATE SOURCE FILES
+------------------------
+
+Compile the Python files:
+
+python -m py_compile \
+  generate_sample_data.py \
+  generate_quality_dashboard.py \
+  test_quality_dashboard.py
+
+Validate the dashboard configuration:
+
+python -m json.tool dashboard_config.json > /dev/null \
+  && echo "Dashboard configuration is valid JSON"
+
+
+4. GENERATE SAMPLE LIFECYCLE DATA
+---------------------------------
+
+Run:
+
+python generate_sample_data.py
+
+This generates:
+
+data/pre_release_results.json
+data/cicd_quality_gate_results.json
+data/production_monitoring_results.json
+data/human_review_results.json
+data/regression_feedback_results.json
+
+Validate the generated files:
+
+for file in data/*.json; do
+  python -m json.tool "$file" > /dev/null || exit 1
+  echo "Valid JSON: $file"
+done
+
+
+5. GENERATE THE QUALITY DASHBOARD
+---------------------------------
+
+Run in reporting mode:
+
+python generate_quality_dashboard.py
+
+Expected main results:
+
+Overall decision: BLOCK
+Quality score: 41.18%
+Checks: 5 passed, 7 failed
+Blocking failures: 3
+Regression cases created: 7
+
+Generated files:
+
+reports/ai_quality_summary.json
+reports/ai_quality_dashboard.html
+
+
+6. VALIDATE THE JSON SUMMARY
+----------------------------
+
+Run:
+
+python -m json.tool \
+  reports/ai_quality_summary.json > /dev/null \
+  && echo "AI quality summary is valid JSON"
+
+
+7. OPEN THE HTML DASHBOARD
+--------------------------
+
+On macOS:
+
+open reports/ai_quality_dashboard.html
+
+On Windows:
+
+start reports/ai_quality_dashboard.html
+
+On Linux:
+
+xdg-open reports/ai_quality_dashboard.html
+
+
+8. RUN THE AUTOMATED TESTS
+--------------------------
+
+Run:
+
+pytest test_quality_dashboard.py -v
+
+Expected:
+
+9 passed
+
+The tests cover:
+
+- BLOCK decision
+- CONDITIONAL decision
+- APPROVE decision
+- Release-blocking reasons
+- Weighted quality score
+- Pre-release pass with production failure
+- HTML dashboard rendering
+- Reporting-mode exit code
+- Enforcement-mode exit code
+
+
+9. REPORTING MODE
+-----------------
+
+Command:
+
+python generate_quality_dashboard.py
+
+Reporting mode always returns exit code 0 when report generation succeeds.
+
+Check it with:
+
+python generate_quality_dashboard.py
+echo "Reporting-mode exit code: $?"
+
+Expected:
+
+Reporting-mode exit code: 0
+
+Use reporting mode for:
+
+- Scheduled monitoring reports
+- Management dashboards
+- Audit evidence generation
+- Quality review meetings
+
+
+10. ENFORCEMENT MODE
+--------------------
+
+Command:
+
+python generate_quality_dashboard.py --enforce-gate
+
+Capture the result:
+
+python generate_quality_dashboard.py --enforce-gate
+
+gate_exit_code=$?
+
+echo "Enforced quality-gate exit code: $gate_exit_code"
+
+For the included degraded-production scenario, expected:
+
+Enforced quality-gate exit code: 1
+
+Use enforcement mode for:
+
+- Deployment gates
+- Release promotion gates
+- Production rollout decisions
+- Automated governance controls
+
+
+11. DECISION RULES
+------------------
+
+APPROVE:
+
+- All quality checks pass
+- No unresolved blocking risk exists
+
+CONDITIONAL:
+
+- No release-blocking failure exists
+- At least one non-critical threshold fails
+
+BLOCK:
+
+- At least one release-blocking rule fails
+
+The decision rules and thresholds are defined in:
+
+dashboard_config.json
+
+
+12. INCLUDED SAMPLE SCENARIO
+----------------------------
+
+Pre-release evaluation: PASS
+CI/CD quality gate: PASS
+Production monitoring: ALERT
+Human review: COMPLETED
+Regression cases created: 7
+Final governance decision: BLOCK
+
+Blocking reasons:
+
+- Three unresolved critical alerts
+- One PII incident
+- One unsupported action claim
+
+
+13. COMPLETE LOCAL VALIDATION
+-----------------------------
+
+Run:
+
+python generate_sample_data.py
+
+python -m py_compile \
+  generate_sample_data.py \
+  generate_quality_dashboard.py \
+  test_quality_dashboard.py
+
+pytest test_quality_dashboard.py -v
+
+python generate_quality_dashboard.py
+
+python -m json.tool \
+  reports/ai_quality_summary.json > /dev/null
+
+ls -lh \
+  reports/ai_quality_summary.json \
+  reports/ai_quality_dashboard.html
+
+
+14. IMPORTANT PORTFOLIO NOTE
+----------------------------
+
+The included data is a controlled portfolio simulation.
+
+In a production implementation, the dashboard inputs would be populated
+automatically from:
+
+- AI evaluation platforms
+- CI/CD pipelines
+- Production observability systems
+- Security and privacy monitoring
+- Human-review workflows
+- Incident and regression-management systems

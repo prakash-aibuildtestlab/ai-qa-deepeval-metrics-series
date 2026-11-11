@@ -1,0 +1,155 @@
+name: AI Quality Governance Dashboard
+
+on:
+  push:
+    branches:
+      - main
+      - "feature/**"
+    paths:
+      - "25_ai_quality_dashboard_suite/**"
+      - ".github/workflows/ai-quality-dashboard.yml"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "25_ai_quality_dashboard_suite/**"
+      - ".github/workflows/ai-quality-dashboard.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality-dashboard:
+    name: Validate AI Quality Governance
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: 25_ai_quality_dashboard_suite
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            25_ai_quality_dashboard_suite/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Generate lifecycle data
+        run: |
+          python generate_sample_data.py
+
+      - name: Validate Python files
+        run: |
+          python -m py_compile \
+            generate_sample_data.py \
+            generate_quality_dashboard.py \
+            test_quality_dashboard.py
+
+      - name: Validate JSON inputs
+        run: |
+          python -m json.tool dashboard_config.json > /dev/null
+
+          for file in data/*.json; do
+            python -m json.tool "$file" > /dev/null
+          done
+
+      - name: Run governance tests
+        run: |
+          pytest test_quality_dashboard.py -v
+
+      - name: Generate quality dashboard
+        run: |
+          python generate_quality_dashboard.py
+
+      - name: Validate generated summary
+        run: |
+          python -m json.tool \
+            reports/ai_quality_summary.json > /dev/null
+
+      - name: Verify controlled BLOCK enforcement
+        run: |
+          set +e
+
+          python generate_quality_dashboard.py \
+            --enforce-gate
+
+          gate_exit_code=$?
+
+          set -e
+
+          echo "Observed enforcement exit code: $gate_exit_code"
+
+          if [ "$gate_exit_code" -ne 1 ]; then
+            echo "Expected controlled BLOCK exit code 1."
+            exit 1
+          fi
+
+          echo "Controlled BLOCK behaviour verified."
+
+      - name: Write GitHub step summary
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+
+          with open(
+              "reports/ai_quality_summary.json",
+              encoding="utf-8",
+          ) as file:
+              summary = json.load(file)
+
+          checks = summary["check_summary"]
+
+          print("# AI Quality Governance Dashboard")
+          print()
+          print(
+              f"**Overall decision:** "
+              f"{summary['overall_decision']}"
+          )
+          print()
+          print(
+              f"**Quality score:** "
+              f"{summary['quality_score']:.2f}%"
+          )
+          print()
+          print("| Measure | Result |")
+          print("|---|---:|")
+          print(f"| Total checks | {checks['total']} |")
+          print(f"| Passed | {checks['passed']} |")
+          print(f"| Failed | {checks['failed']} |")
+          print(
+              f"| Blocking failures | "
+              f"{checks['blocking_failures']} |"
+          )
+          print(
+              f"| Regression cases | "
+              f"{summary['lifecycle_summary']['regression_cases_created']} |"
+          )
+          print()
+          print(
+              "The included dataset intentionally represents "
+              "a controlled production-degradation scenario."
+          )
+          PY
+
+      - name: Upload dashboard reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-quality-governance-dashboard
+          path: |
+            25_ai_quality_dashboard_suite/reports/ai_quality_dashboard.html
+            25_ai_quality_dashboard_suite/reports/ai_quality_summary.json
+          if-no-files-found: error
+          retention-days: 14
