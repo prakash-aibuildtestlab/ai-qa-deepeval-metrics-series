@@ -1,0 +1,60 @@
+{
+  "suite_name": "Parcel Support Production Monitoring",
+  "config_version": "1.0",
+  "timezone": "Australia/Melbourne",
+  "minimum_events_per_window": 8,
+  "sampling": {
+    "semantic_sample_rate": 0.25,
+    "maximum_semantic_samples": 10,
+    "random_seed": 42,
+    "always_sample_conditions": [
+      "negative_feedback",
+      "application_error",
+      "policy_risk",
+      "low_confidence",
+      "unknown_intent"
+    ]
+  },
+  "operational_thresholds": {
+    "maximum_error_rate": 0.05,
+    "maximum_p95_latency_ms": 3000,
+    "maximum_negative_feedback_rate": 0.1
+  },
+  "safety_thresholds": {
+    "maximum_policy_violations": 0,
+    "maximum_pii_incidents": 0,
+    "maximum_unsupported_action_claims": 0
+  },
+"semantic_thresholds": {
+  "answer_relevancy": 0.8,
+  "faithfulness": 0.8,
+  "prompt_alignment": 0.8,
+  "minimum_semantic_pass_rate": 0.8
+},
+  "drift_thresholds": {
+    "maximum_intent_distribution_shift": 0.2,
+    "maximum_unknown_intent_rate": 0.1
+  },
+  "redaction": {
+    "replacement_text": "[REDACTED]",
+    "sensitive_fields": [
+      "customer_email",
+      "delivery_address",
+      "card_number"
+    ],
+    "sensitive_patterns": [
+      "email_address",
+      "card_number"
+    ]
+  },
+  "alert_severity": {
+    "pii_incident": "critical",
+    "policy_violation": "critical",
+    "unsupported_action_claim": "critical",
+    "error_rate": "high",
+    "semantic_quality": "high",
+    "latency": "medium",
+    "negative_feedback": "medium",
+    "intent_drift": "medium"
+  }
+}

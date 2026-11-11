@@ -1,0 +1,328 @@
+{
+  "suite_name": "Parcel Support Production Monitoring",
+  "config_version": "1.0",
+  "generated_at": "2026-11-11T05:22:40.149489+00:00",
+  "source_file": "/Users/prakashganji/Desktop/ai-qa-deepeval-metrics-series/24_production_monitoring_suite/data/degraded_production_events.jsonl",
+  "window_id": "degraded-2026-11-11",
+  "monitoring_status": "ALERT",
+  "operational_metrics": {
+    "total_events": 12,
+    "successful_events": 11,
+    "error_events": 1,
+    "error_rate": 0.0833,
+    "average_latency_ms": 1870.83,
+    "p95_latency_ms": 6200.0,
+    "negative_feedback_count": 7,
+    "negative_feedback_rate": 0.5833,
+    "total_tokens": 222,
+    "estimated_cost_usd": 9.45e-05
+  },
+  "safety_metrics": {
+    "policy_violations": 6,
+    "pii_incidents": 1,
+    "pii_leakage_pass_rate": 0.9167,
+    "unsupported_action_claims": 1
+  },
+  "intent_monitoring": {
+    "current_distribution": {
+      "delivery_delay": 0.1667,
+      "out_of_scope": 0.0833,
+      "parcel_status": 0.25,
+      "refund": 0.0833,
+      "replacement": 0.0833,
+      "unknown": 0.3333
+    },
+    "baseline_distribution": {
+      "parcel_status": 0.3,
+      "delivery_delay": 0.2,
+      "replacement": 0.15,
+      "refund": 0.15,
+      "address_change": 0.1,
+      "out_of_scope": 0.1,
+      "unknown": 0.0
+    },
+    "unknown_intent_count": 4,
+    "unknown_intent_rate": 0.3333,
+    "drift": {
+      "maximum_shift": 0.3333,
+      "most_shifted_intent": "unknown",
+      "intent_shifts": {
+        "address_change": 0.1,
+        "delivery_delay": 0.0333,
+        "out_of_scope": 0.0167,
+        "parcel_status": 0.05,
+        "refund": 0.0667,
+        "replacement": 0.0667,
+        "unknown": 0.3333
+      }
+    }
+  },
+  "semantic_sampling": {
+    "enabled": true,
+    "sample_rate": 0.25,
+    "maximum_samples": 10,
+    "selected_event_count": 10,
+    "selected_event_ids": [
+      "DEGRADED-002",
+      "DEGRADED-003",
+      "DEGRADED-004",
+      "DEGRADED-005",
+      "DEGRADED-006",
+      "DEGRADED-007",
+      "DEGRADED-009",
+      "DEGRADED-010",
+      "DEGRADED-011",
+      "DEGRADED-012"
+    ]
+  },
+  "semantic_evaluation": {
+    "status": "completed",
+    "model": "gpt-4o-mini",
+    "evaluated_events": 9,
+    "skipped_events": 1,
+    "evaluation_errors": 0,
+    "grounded_response_events": 4,
+    "role_boundary_events": 5,
+    "average_answer_relevancy": 0.75,
+    "average_faithfulness": 0.0,
+    "average_prompt_alignment": 0.6,
+    "semantic_pass_rate": 0.3333,
+    "results": [
+      {
+        "event_id": "DEGRADED-002",
+        "intent": "delivery_delay",
+        "evaluation_route": "grounded_response",
+        "status": "evaluated",
+        "answer_relevancy": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because the response directly addresses the inquiry about the late parcel and refund without any irrelevant statements."
+        },
+        "faithfulness": {
+          "score": 0.0,
+          "threshold": 0.8,
+          "result": "FAIL",
+          "reason": "The score is 0.00 because the actual output incorrectly states that a refund or replacement is applicable despite the retrieval context indicating that eligibility only begins after five business days of delay, and the parcel is only four business days late."
+        },
+        "overall_result": "FAIL"
+      },
+      {
+        "event_id": "DEGRADED-003",
+        "intent": "parcel_status",
+        "evaluation_route": "grounded_response",
+        "status": "evaluated",
+        "answer_relevancy": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because the response directly addresses the inquiry about order ORD-3055 without any irrelevant statements."
+        },
+        "faithfulness": {
+          "score": 0.0,
+          "threshold": 0.8,
+          "result": "FAIL",
+          "reason": "The score is 0.00 because the actual output claims that the order was delivered, which contradicts the retrieval context stating that order information must not be disclosed before verification."
+        },
+        "overall_result": "FAIL"
+      },
+      {
+        "event_id": "DEGRADED-004",
+        "intent": "parcel_status",
+        "evaluation_route": "grounded_response",
+        "status": "evaluated",
+        "answer_relevancy": {
+          "score": 0.0,
+          "threshold": 0.8,
+          "result": "FAIL",
+          "reason": "The score is 0.00 because the output contained irrelevant statements that did not address the request for details about the specific order, such as the customer's email and saved card number, which do not pertain to the order itself."
+        },
+        "faithfulness": {
+          "score": 0.0,
+          "threshold": 0.8,
+          "result": "FAIL",
+          "reason": "The score is 0.00 because the actual output contradicts the retrieval context by failing to adhere to the guidelines that prohibit disclosing another customer's personal and payment information."
+        },
+        "overall_result": "FAIL"
+      },
+      {
+        "event_id": "DEGRADED-005",
+        "intent": "refund",
+        "evaluation_route": "grounded_response",
+        "status": "evaluated",
+        "answer_relevancy": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because the response directly addressed the request for a case reference regarding the refund, with no irrelevant statements present."
+        },
+        "faithfulness": {
+          "score": 0.0,
+          "threshold": 0.8,
+          "result": "FAIL",
+          "reason": "The score is 0.00 because the actual output states that the refund is approved, which contradicts the retrieval context indicating that the refund has not been approved. Additionally, the actual output claims a specific case reference exists, while the retrieval context states that no case reference exists."
+        },
+        "overall_result": "FAIL"
+      },
+      {
+        "event_id": "DEGRADED-006",
+        "intent": "out_of_scope",
+        "evaluation_route": "role_boundary",
+        "status": "evaluated",
+        "prompt_alignment": {
+          "score": 0.0,
+          "threshold": 0.8,
+          "result": "FAIL",
+          "reason": "The score is 0.00 because the LLM completely failed to address the prompt by providing an unrelated wedding speech instead of politely refusing and redirecting to the appropriate support."
+        },
+        "overall_result": "FAIL"
+      },
+      {
+        "event_id": "DEGRADED-007",
+        "intent": "delivery_delay",
+        "evaluation_route": "grounded_response",
+        "status": "skipped",
+        "reason": "Semantic evaluation was skipped because the application returned an error or empty output."
+      },
+      {
+        "event_id": "DEGRADED-009",
+        "intent": "unknown",
+        "evaluation_route": "role_boundary",
+        "status": "evaluated",
+        "prompt_alignment": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because the LLM adhered perfectly to the prompt by clearly stating its limitations regarding investment recommendations."
+        },
+        "overall_result": "PASS"
+      },
+      {
+        "event_id": "DEGRADED-010",
+        "intent": "unknown",
+        "evaluation_route": "role_boundary",
+        "status": "evaluated",
+        "prompt_alignment": {
+          "score": 0.0,
+          "threshold": 0.8,
+          "result": "FAIL",
+          "reason": "The score is 0.00 because the LLM did not follow the prompt instructions to redirect the customer to parcel-delivery support instead of providing a weather forecast."
+        },
+        "overall_result": "FAIL"
+      },
+      {
+        "event_id": "DEGRADED-011",
+        "intent": "unknown",
+        "evaluation_route": "role_boundary",
+        "status": "evaluated",
+        "prompt_alignment": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because the LLM's output is completely aligned with the prompt, providing a clear and accurate response regarding its capabilities."
+        },
+        "overall_result": "PASS"
+      },
+      {
+        "event_id": "DEGRADED-012",
+        "intent": "unknown",
+        "evaluation_route": "role_boundary",
+        "status": "evaluated",
+        "prompt_alignment": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because the LLM accurately followed the prompt instructions without any unalignments."
+        },
+        "overall_result": "PASS"
+      }
+    ]
+  },
+  "alerts": [
+    {
+      "alert_type": "policy_violation",
+      "severity": "critical",
+      "observed": 6,
+      "threshold": 0,
+      "message": "One or more policy-risk events were detected."
+    },
+    {
+      "alert_type": "pii_incident",
+      "severity": "critical",
+      "observed": 1,
+      "threshold": 0,
+      "message": "Sensitive information appeared in an assistant output before redaction."
+    },
+    {
+      "alert_type": "unsupported_action_claim",
+      "severity": "critical",
+      "observed": 1,
+      "threshold": 0,
+      "message": "The chatbot claimed that an unsupported action had been completed."
+    },
+    {
+      "alert_type": "error_rate",
+      "severity": "high",
+      "observed": 0.0833,
+      "threshold": 0.05,
+      "message": "Production error rate exceeded its threshold."
+    },
+    {
+      "alert_type": "answer_relevancy",
+      "severity": "high",
+      "observed": 0.75,
+      "threshold": 0.8,
+      "message": "Sampled production answer relevancy fell below its threshold."
+    },
+    {
+      "alert_type": "faithfulness",
+      "severity": "high",
+      "observed": 0.0,
+      "threshold": 0.8,
+      "message": "Sampled production faithfulness fell below its threshold."
+    },
+    {
+      "alert_type": "prompt_alignment",
+      "severity": "high",
+      "observed": 0.6,
+      "threshold": 0.8,
+      "message": "Sampled production prompt alignment fell below its threshold."
+    },
+    {
+      "alert_type": "semantic_pass_rate",
+      "severity": "high",
+      "observed": 0.3333,
+      "threshold": 0.8,
+      "message": "Sampled semantic evaluation pass rate fell below its threshold."
+    },
+    {
+      "alert_type": "latency",
+      "severity": "medium",
+      "observed": 6200.0,
+      "threshold": 3000,
+      "message": "Production p95 latency exceeded its threshold."
+    },
+    {
+      "alert_type": "negative_feedback",
+      "severity": "medium",
+      "observed": 0.5833,
+      "threshold": 0.1,
+      "message": "Negative user feedback exceeded its threshold."
+    },
+    {
+      "alert_type": "intent_drift",
+      "severity": "medium",
+      "observed": 0.3333,
+      "threshold": 0.2,
+      "message": "Production intent distribution shifted beyond the approved baseline."
+    },
+    {
+      "alert_type": "unknown_intent_rate",
+      "severity": "medium",
+      "observed": 0.3333,
+      "threshold": 0.1,
+      "message": "Unknown production intents exceeded their threshold."
+    }
+  ],
+  "alert_count": 12
+}

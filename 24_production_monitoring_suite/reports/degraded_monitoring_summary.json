@@ -1,0 +1,147 @@
+{
+  "suite_name": "Parcel Support Production Monitoring",
+  "config_version": "1.0",
+  "generated_at": "2026-11-11T02:49:34.200168+00:00",
+  "source_file": "/Users/prakashganji/Desktop/ai-qa-deepeval-metrics-series/24_production_monitoring_suite/data/degraded_production_events.jsonl",
+  "window_id": "degraded-2026-11-11",
+  "monitoring_status": "ALERT",
+  "operational_metrics": {
+    "total_events": 12,
+    "successful_events": 11,
+    "error_events": 1,
+    "error_rate": 0.0833,
+    "average_latency_ms": 1870.83,
+    "p95_latency_ms": 6200.0,
+    "negative_feedback_count": 7,
+    "negative_feedback_rate": 0.5833,
+    "total_tokens": 222,
+    "estimated_cost_usd": 9.45e-05
+  },
+  "safety_metrics": {
+    "policy_violations": 6,
+    "pii_incidents": 1,
+    "pii_leakage_pass_rate": 0.9167,
+    "unsupported_action_claims": 1
+  },
+  "intent_monitoring": {
+    "current_distribution": {
+      "delivery_delay": 0.1667,
+      "out_of_scope": 0.0833,
+      "parcel_status": 0.25,
+      "refund": 0.0833,
+      "replacement": 0.0833,
+      "unknown": 0.3333
+    },
+    "baseline_distribution": {
+      "parcel_status": 0.3,
+      "delivery_delay": 0.2,
+      "replacement": 0.15,
+      "refund": 0.15,
+      "address_change": 0.1,
+      "out_of_scope": 0.1,
+      "unknown": 0.0
+    },
+    "unknown_intent_count": 4,
+    "unknown_intent_rate": 0.3333,
+    "drift": {
+      "maximum_shift": 0.3333,
+      "most_shifted_intent": "unknown",
+      "intent_shifts": {
+        "address_change": 0.1,
+        "delivery_delay": 0.0333,
+        "out_of_scope": 0.0167,
+        "parcel_status": 0.05,
+        "refund": 0.0667,
+        "replacement": 0.0667,
+        "unknown": 0.3333
+      }
+    }
+  },
+  "semantic_sampling": {
+    "enabled": false,
+    "sample_rate": 0.25,
+    "maximum_samples": 10,
+    "selected_event_count": 10,
+    "selected_event_ids": [
+      "DEGRADED-002",
+      "DEGRADED-003",
+      "DEGRADED-004",
+      "DEGRADED-005",
+      "DEGRADED-006",
+      "DEGRADED-007",
+      "DEGRADED-009",
+      "DEGRADED-010",
+      "DEGRADED-011",
+      "DEGRADED-012"
+    ]
+  },
+  "semantic_evaluation": {
+    "status": "not_run",
+    "model": "gpt-4o-mini",
+    "evaluated_events": 0,
+    "skipped_events": 0,
+    "average_answer_relevancy": null,
+    "average_faithfulness": null,
+    "semantic_pass_rate": null,
+    "results": []
+  },
+  "alerts": [
+    {
+      "alert_type": "policy_violation",
+      "severity": "critical",
+      "observed": 6,
+      "threshold": 0,
+      "message": "One or more policy-risk events were detected."
+    },
+    {
+      "alert_type": "pii_incident",
+      "severity": "critical",
+      "observed": 1,
+      "threshold": 0,
+      "message": "Sensitive information appeared in an assistant output before redaction."
+    },
+    {
+      "alert_type": "unsupported_action_claim",
+      "severity": "critical",
+      "observed": 1,
+      "threshold": 0,
+      "message": "The chatbot claimed that an unsupported action had been completed."
+    },
+    {
+      "alert_type": "error_rate",
+      "severity": "high",
+      "observed": 0.0833,
+      "threshold": 0.05,
+      "message": "Production error rate exceeded its threshold."
+    },
+    {
+      "alert_type": "latency",
+      "severity": "medium",
+      "observed": 6200.0,
+      "threshold": 3000,
+      "message": "Production p95 latency exceeded its threshold."
+    },
+    {
+      "alert_type": "negative_feedback",
+      "severity": "medium",
+      "observed": 0.5833,
+      "threshold": 0.1,
+      "message": "Negative user feedback exceeded its threshold."
+    },
+    {
+      "alert_type": "intent_drift",
+      "severity": "medium",
+      "observed": 0.3333,
+      "threshold": 0.2,
+      "message": "Production intent distribution shifted beyond the approved baseline."
+    },
+    {
+      "alert_type": "unknown_intent_rate",
+      "severity": "medium",
+      "observed": 0.3333,
+      "threshold": 0.1,
+      "message": "Unknown production intents exceeded their threshold."
+    }
+  ],
+  "alert_count": 8
+}

@@ -1,0 +1,396 @@
+PRODUCTION AI MONITORING AND EVALUATION SUITE
+=============================================
+
+This module demonstrates post-release monitoring for a parcel-support AI
+chatbot.
+
+It covers:
+
+- Operational monitoring
+- Safety and policy monitoring
+- Intent drift
+- Sampled semantic evaluation
+- Metric routing
+- Human adjudication
+- Production-to-regression conversion
+- Automated pytest validation
+
+
+1. PREREQUISITES
+----------------
+
+Recommended:
+
+- Python 3.12 or later
+- A Python virtual environment
+- OPENAI_API_KEY for semantic evaluation
+- Internet access for DeepEval evaluator calls
+
+The deterministic monitoring commands do not require an OpenAI API key.
+
+
+2. ACTIVATE THE VIRTUAL ENVIRONMENT
+-----------------------------------
+
+From the repository root:
+
+    source .venv/bin/activate
+
+Move into the module:
+
+    cd 24_production_monitoring_suite
+
+
+3. INSTALL DEPENDENCIES
+-----------------------
+
+    python -m pip install -r requirements.txt
+
+Confirm versions:
+
+    python - <<'PY'
+from importlib.metadata import version
+
+for package in (
+    "deepeval",
+    "openai",
+    "python-dotenv",
+    "pytest",
+):
+    print(f"{package}: {version(package)}")
+PY
+
+
+4. CONFIGURE THE OPENAI API KEY
+-------------------------------
+
+The suite loads OPENAI_API_KEY from the repository-level .env file.
+
+Example:
+
+    OPENAI_API_KEY=your-key-here
+
+Check configuration without printing the secret:
+
+    python - <<'PY'
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv(Path.cwd().parent / ".env")
+
+print(
+    "OPENAI_API_KEY configured:",
+    bool(os.getenv("OPENAI_API_KEY")),
+)
+PY
+
+
+5. GENERATE SYNTHETIC PRODUCTION TELEMETRY
+------------------------------------------
+
+    python generate_production_events.py
+
+Expected:
+
+    Healthy events: 20
+    Degraded events: 12
+    Feedback records: 13
+
+Generated files:
+
+    data/healthy_production_events.jsonl
+    data/degraded_production_events.jsonl
+    data/human_feedback.jsonl
+
+All data is synthetic.
+
+
+6. VALIDATE THE JSONL EVENT FILES
+---------------------------------
+
+    python - <<'PY'
+import json
+from pathlib import Path
+
+files = [
+    Path("data/healthy_production_events.jsonl"),
+    Path("data/degraded_production_events.jsonl"),
+    Path("data/human_feedback.jsonl"),
+]
+
+for file_path in files:
+    records = []
+
+    with file_path.open(encoding="utf-8") as file:
+        for line_number, line in enumerate(file, start=1):
+            try:
+                records.append(json.loads(line))
+            except json.JSONDecodeError as error:
+                raise SystemExit(
+                    f"{file_path}:{line_number}: {error}"
+                )
+
+    print(f"{file_path}: {len(records)} valid records")
+PY
+
+
+7. RUN DETERMINISTIC HEALTHY-WINDOW MONITORING
+----------------------------------------------
+
+    python monitor_production.py \
+      --input data/healthy_production_events.jsonl \
+      --output reports/healthy_monitoring_summary.json
+
+Expected:
+
+    Status: HEALTHY
+    Total events: 20
+    Error rate: 0.00%
+    Policy violations: 0
+    PII incidents: 0
+    Alerts: 0
+
+
+8. RUN DETERMINISTIC DEGRADED-WINDOW MONITORING
+-----------------------------------------------
+
+    python monitor_production.py \
+      --input data/degraded_production_events.jsonl \
+      --output reports/degraded_monitoring_summary.json
+
+Expected:
+
+    Status: ALERT
+    Total events: 12
+    Error rate: 8.33%
+    P95 latency: 6200 ms
+    Policy violations: 6
+    PII incidents: 1
+    Unsupported action claims: 1
+    Alerts: 8
+
+
+9. RUN ROUTED SEMANTIC MONITORING
+---------------------------------
+
+Healthy window:
+
+    python monitor_production.py \
+      --input data/healthy_production_events.jsonl \
+      --output reports/healthy_monitoring_routed.json \
+      --semantic
+
+Expected:
+
+    Semantic evaluations: 5
+    Grounded-response evaluations: 5
+    Role-boundary evaluations: 0
+    Semantic evaluation errors: 0
+    Average Answer Relevancy: 1.00
+    Average Faithfulness: 0.90
+    Semantic pass rate: 80.00%
+    Status: HEALTHY
+
+Degraded window:
+
+    python monitor_production.py \
+      --input data/degraded_production_events.jsonl \
+      --output reports/degraded_monitoring_routed.json \
+      --semantic
+
+Expected:
+
+    Semantic evaluations: 9
+    Grounded-response evaluations: 4
+    Role-boundary evaluations: 5
+    Semantic evaluation errors: 0
+    Average Answer Relevancy: 0.75
+    Average Faithfulness: 0.00
+    Average Prompt Alignment: 0.60
+    Semantic pass rate: 33.33%
+    Status: ALERT
+
+Semantic metric scores may vary slightly because LLM judges are
+non-deterministic.
+
+
+10. METRIC ROUTING
+------------------
+
+Grounded parcel-support responses use:
+
+- Answer Relevancy
+- Faithfulness
+
+Out-of-scope and unknown intents use:
+
+- Prompt Alignment
+
+Known critical risks use deterministic signals:
+
+- PII incident
+- Policy violation
+- Unsupported action claim
+- Application error
+
+
+11. APPLY HUMAN REVIEW
+----------------------
+
+The healthy semantic run contains one automated evaluator false positive.
+
+Apply the simulated human-review decision:
+
+    python apply_human_reviews.py \
+      --report reports/healthy_monitoring_routed.json \
+      --reviews human_review_labels.json \
+      --output reports/healthy_monitoring_adjudicated.json
+
+Expected:
+
+    Reviews applied: 1
+    Unmatched reviews: 0
+    Automated semantic pass rate: 80.00%
+    Adjudicated semantic pass rate: 100.00%
+
+The original automated report remains unchanged.
+
+
+12. CREATE PRODUCTION REGRESSION CASES
+--------------------------------------
+
+Convert confirmed degraded-window failures into regression cases:
+
+    python create_regression_cases.py \
+      --events data/degraded_production_events.jsonl \
+      --report reports/degraded_monitoring_routed.json \
+      --output data/production_regression_cases.json
+
+Expected:
+
+    Regression cases created: 7
+
+Expected source events:
+
+    DEGRADED-002
+    DEGRADED-003
+    DEGRADED-004
+    DEGRADED-005
+    DEGRADED-006
+    DEGRADED-007
+    DEGRADED-010
+
+
+13. RUN AUTOMATED TESTS
+-----------------------
+
+    pytest tests/test_production_monitoring.py -v
+
+Expected:
+
+    collected 5 items
+    5 passed
+
+The tests validate:
+
+- Healthy monitoring
+- Degraded alert detection
+- Human adjudication
+- Regression-case generation
+- PII redaction
+
+
+14. VALIDATE GENERATED JSON REPORTS
+-----------------------------------
+
+    python -m json.tool \
+      reports/healthy_monitoring_routed.json > /dev/null
+
+    python -m json.tool \
+      reports/degraded_monitoring_routed.json > /dev/null
+
+    python -m json.tool \
+      reports/healthy_monitoring_adjudicated.json > /dev/null
+
+    python -m json.tool \
+      data/production_regression_cases.json > /dev/null
+
+If all commands exit without errors, the JSON artifacts are valid.
+
+
+15. COMPILE ALL PYTHON FILES
+----------------------------
+
+    python -m py_compile \
+      generate_production_events.py \
+      monitor_production.py \
+      apply_human_reviews.py \
+      create_regression_cases.py \
+      tests/conftest.py \
+      tests/test_production_monitoring.py
+
+
+16. TROUBLESHOOTING
+-------------------
+
+Problem:
+
+    ModuleNotFoundError while running pytest
+
+Check that tests/conftest.py adds the suite root to sys.path before the test
+modules are imported.
+
+
+Problem:
+
+    OPENAI_API_KEY is not configured
+
+Add the key to the repository-level .env file. Do not commit the .env file.
+
+
+Problem:
+
+    Semantic evaluation scores change between runs
+
+This is expected for LLM-based evaluators. Use thresholds, repeated runs,
+human-reviewed labels and deterministic safety checks.
+
+
+Problem:
+
+    Semantic evaluation error alert
+
+Inspect the error field in the semantic result. Evaluator execution failures
+must not be treated as application passes.
+
+
+Problem:
+
+    Healthy event fails a semantic metric
+
+Review the context, response and evaluator reason. If the automated judgment
+conflicts with approved policy, send the event for human adjudication rather
+than silently changing the threshold.
+
+
+17. END-TO-END FLOW
+-------------------
+
+    Generate synthetic production events
+
+    Run deterministic monitoring
+
+    Sample high-risk events
+
+    Route events to suitable semantic metrics
+
+    Generate alerts
+
+    Review uncertain evaluator decisions
+
+    Preserve automated and adjudicated reports
+
+    Convert confirmed failures into regression tests
+
+    Execute regression tests before the next release

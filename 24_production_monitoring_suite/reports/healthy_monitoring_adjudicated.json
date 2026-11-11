@@ -1,0 +1,208 @@
+{
+  "suite_name": "Parcel Support Production Monitoring",
+  "config_version": "1.0",
+  "generated_at": "2026-11-11T03:54:09.666129+00:00",
+  "source_file": "/Users/prakashganji/Desktop/ai-qa-deepeval-metrics-series/24_production_monitoring_suite/data/healthy_production_events.jsonl",
+  "window_id": "healthy-2026-11-10",
+  "monitoring_status": "HEALTHY",
+  "operational_metrics": {
+    "total_events": 20,
+    "successful_events": 20,
+    "error_events": 0,
+    "error_rate": 0.0,
+    "average_latency_ms": 1217,
+    "p95_latency_ms": 1455.0,
+    "negative_feedback_count": 1,
+    "negative_feedback_rate": 0.05,
+    "total_tokens": 578,
+    "estimated_cost_usd": 0.0002523
+  },
+  "safety_metrics": {
+    "policy_violations": 0,
+    "pii_incidents": 0,
+    "pii_leakage_pass_rate": 1.0,
+    "unsupported_action_claims": 0
+  },
+  "intent_monitoring": {
+    "current_distribution": {
+      "address_change": 0.1,
+      "delivery_delay": 0.2,
+      "out_of_scope": 0.1,
+      "parcel_status": 0.3,
+      "refund": 0.15,
+      "replacement": 0.15
+    },
+    "baseline_distribution": {
+      "parcel_status": 0.3,
+      "delivery_delay": 0.2,
+      "replacement": 0.15,
+      "refund": 0.15,
+      "address_change": 0.1,
+      "out_of_scope": 0.1,
+      "unknown": 0.0
+    },
+    "unknown_intent_count": 0,
+    "unknown_intent_rate": 0.0,
+    "drift": {
+      "maximum_shift": 0.0,
+      "most_shifted_intent": "address_change",
+      "intent_shifts": {
+        "address_change": 0.0,
+        "delivery_delay": 0.0,
+        "out_of_scope": 0.0,
+        "parcel_status": 0.0,
+        "refund": 0.0,
+        "replacement": 0.0,
+        "unknown": 0.0
+      }
+    }
+  },
+  "semantic_sampling": {
+    "enabled": true,
+    "sample_rate": 0.25,
+    "maximum_samples": 10,
+    "selected_event_count": 5,
+    "selected_event_ids": [
+      "HEALTHY-005",
+      "HEALTHY-010",
+      "HEALTHY-014",
+      "HEALTHY-015",
+      "HEALTHY-018"
+    ]
+  },
+  "semantic_evaluation": {
+    "status": "completed",
+    "model": "gpt-4o-mini",
+    "evaluated_events": 5,
+    "skipped_events": 0,
+    "evaluation_errors": 0,
+    "grounded_response_events": 5,
+    "role_boundary_events": 0,
+    "average_answer_relevancy": 1.0,
+    "average_faithfulness": 0.9,
+    "average_prompt_alignment": null,
+    "semantic_pass_rate": 0.8,
+    "results": [
+      {
+        "event_id": "HEALTHY-005",
+        "intent": "parcel_status",
+        "evaluation_route": "grounded_response",
+        "status": "evaluated",
+        "answer_relevancy": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because there are no irrelevant statements in the output, indicating a perfect alignment with the input query."
+        },
+        "faithfulness": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because there are no contradictions present, indicating that the actual output aligns perfectly with the retrieval context."
+        },
+        "overall_result": "PASS"
+      },
+      {
+        "event_id": "HEALTHY-010",
+        "intent": "delivery_delay",
+        "evaluation_route": "grounded_response",
+        "status": "evaluated",
+        "answer_relevancy": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because the response directly addresses the inquiry about options for a late parcel without including any irrelevant information."
+        },
+        "faithfulness": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because there are no contradictions present, indicating that the actual output aligns perfectly with the retrieval context."
+        },
+        "overall_result": "PASS"
+      },
+      {
+        "event_id": "HEALTHY-014",
+        "intent": "refund",
+        "evaluation_route": "grounded_response",
+        "status": "evaluated",
+        "answer_relevancy": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because the response directly addresses the inquiry about requesting a refund for a late parcel without including any irrelevant information."
+        },
+        "faithfulness": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because there are no contradictions present, indicating that the actual output aligns perfectly with the retrieval context."
+        },
+        "overall_result": "PASS"
+      },
+      {
+        "event_id": "HEALTHY-015",
+        "intent": "refund",
+        "evaluation_route": "grounded_response",
+        "status": "evaluated",
+        "answer_relevancy": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because there are no irrelevant statements in the output, and it directly addresses the question about requesting a refund for a late parcel."
+        },
+        "faithfulness": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because there are no contradictions present, indicating that the actual output aligns perfectly with the retrieval context."
+        },
+        "overall_result": "PASS"
+      },
+      {
+        "event_id": "HEALTHY-018",
+        "intent": "address_change",
+        "evaluation_route": "grounded_response",
+        "status": "evaluated",
+        "answer_relevancy": {
+          "score": 1.0,
+          "threshold": 0.8,
+          "result": "PASS",
+          "reason": "The score is 1.00 because the response directly addresses the question about changing the delivery address for the verified order without including any irrelevant information."
+        },
+        "faithfulness": {
+          "score": 0.5,
+          "threshold": 0.8,
+          "result": "FAIL",
+          "reason": "The score is 0.50 because the actual output contradicts the retrieval context by suggesting that the AI can independently record a preferred address change, despite the context stating that such changes require authorized support confirmation."
+        },
+        "overall_result": "FAIL",
+        "automated_overall_result": "FAIL",
+        "human_review": {
+          "review_id": "REVIEW-001",
+          "metric": "faithfulness",
+          "automated_metric_result": "FAIL",
+          "human_verdict": "PASS",
+          "human_reason": "The response says the chatbot can record the customer's preferred address but that authorised support must confirm the change. This is consistent with the supplied policy context and does not claim that the address change was completed.",
+          "final_verdict": "PASS",
+          "classification": "evaluator_false_positive"
+        },
+        "adjudicated_overall_result": "PASS"
+      }
+    ],
+    "automated_semantic_pass_rate": 0.8,
+    "adjudicated_semantic_pass_rate": 1.0,
+    "human_reviews_applied": 1
+  },
+  "alerts": [],
+  "alert_count": 0,
+  "adjudication": {
+    "status": "completed",
+    "review_set_name": "Production Semantic Evaluation Human Review",
+    "review_status": "portfolio_simulation",
+    "generated_at": "2026-11-11T05:39:32.924764+00:00",
+    "reviews_applied": 1,
+    "unmatched_review_count": 0,
+    "unmatched_reviews": []
+  }
+}
