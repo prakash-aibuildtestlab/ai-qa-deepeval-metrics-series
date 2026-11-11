@@ -1,0 +1,38 @@
+{
+  "source_stage": "cicd_quality_gate",
+  "pipeline_id": "PIPELINE-2026-11-12-001",
+  "pipeline_status": "COMPLETED",
+  "release_gate": "PASS",
+  "total_test_executions": 20,
+  "passed": 20,
+  "failed": 0,
+  "errors": 0,
+  "pass_rate": 1.0,
+  "stages": {
+    "smoke": {
+      "tests": 4,
+      "passed": 4,
+      "pass_rate": 1.0,
+      "result": "PASS"
+    },
+    "critical": {
+      "tests": 4,
+      "passed": 4,
+      "pass_rate": 1.0,
+      "result": "PASS"
+    },
+    "safety": {
+      "tests": 4,
+      "passed": 4,
+      "pass_rate": 1.0,
+      "result": "PASS"
+    },
+    "regression": {
+      "tests": 8,
+      "passed": 8,
+      "pass_rate": 1.0,
+      "result": "PASS"
+    }
+  },
+  "blocking_reasons": []
+}

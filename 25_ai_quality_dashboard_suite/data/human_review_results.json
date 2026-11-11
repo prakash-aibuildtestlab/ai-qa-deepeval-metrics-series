@@ -1,0 +1,21 @@
+{
+  "source_stage": "human_review",
+  "review_status": "COMPLETED",
+  "reviews_applied": 1,
+  "pending_reviews": 0,
+  "automated_semantic_pass_rate": 0.8,
+  "adjudicated_semantic_pass_rate": 1.0,
+  "evaluator_false_positives": 1,
+  "evaluator_false_negatives": 0,
+  "reviews": [
+    {
+      "event_id": "HEALTHY-018",
+      "automated_verdict": "FAIL",
+      "human_verdict": "PASS",
+      "final_verdict": "PASS",
+      "classification": "evaluator_false_positive",
+      "reviewer_role": "AI QA reviewer",
+      "reason": "The response complied with the approved address-change policy."
+    }
+  ]
+}

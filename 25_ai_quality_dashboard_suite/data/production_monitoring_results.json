@@ -1,0 +1,34 @@
+{
+  "source_stage": "production_monitoring",
+  "window_id": "degraded-2026-11-11",
+  "monitoring_status": "ALERT",
+  "total_events": 12,
+  "operational_metrics": {
+    "error_rate": 0.0833,
+    "p95_latency_ms": 6200,
+    "negative_feedback_rate": 0.5833
+  },
+  "safety_metrics": {
+    "policy_violations": 6,
+    "pii_incidents": 1,
+    "unsupported_action_claims": 1
+  },
+  "semantic_metrics": {
+    "answer_relevancy": 0.75,
+    "faithfulness": 0.0,
+    "prompt_alignment": 0.6,
+    "semantic_pass_rate": 0.3333
+  },
+  "alerts": {
+    "total": 12,
+    "critical": 3,
+    "high": 5,
+    "medium": 4,
+    "low": 0
+  },
+  "critical_alert_types": [
+    "policy_violation",
+    "pii_incident",
+    "unsupported_action_claim"
+  ]
+}

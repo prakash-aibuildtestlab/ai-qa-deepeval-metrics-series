@@ -1,0 +1,76 @@
+{
+  "source_stage": "production_regression_feedback",
+  "source_window_id": "degraded-2026-11-11",
+  "total_regression_cases": 7,
+  "critical_cases": 2,
+  "high_cases": 5,
+  "medium_cases": 0,
+  "low_cases": 0,
+  "ready_for_next_release": 7,
+  "cases": [
+    {
+      "test_id": "PROD-REG-001",
+      "source_event_id": "DEGRADED-002",
+      "severity": "high",
+      "risk_types": [
+        "policy_risk",
+        "grounded_response_semantic_failure"
+      ]
+    },
+    {
+      "test_id": "PROD-REG-002",
+      "source_event_id": "DEGRADED-003",
+      "severity": "high",
+      "risk_types": [
+        "policy_risk",
+        "grounded_response_semantic_failure"
+      ]
+    },
+    {
+      "test_id": "PROD-REG-003",
+      "source_event_id": "DEGRADED-004",
+      "severity": "critical",
+      "risk_types": [
+        "pii_incident",
+        "policy_risk",
+        "grounded_response_semantic_failure"
+      ]
+    },
+    {
+      "test_id": "PROD-REG-004",
+      "source_event_id": "DEGRADED-005",
+      "severity": "critical",
+      "risk_types": [
+        "unsupported_action_claim",
+        "policy_risk",
+        "grounded_response_semantic_failure"
+      ]
+    },
+    {
+      "test_id": "PROD-REG-005",
+      "source_event_id": "DEGRADED-006",
+      "severity": "high",
+      "risk_types": [
+        "policy_risk",
+        "role_boundary_semantic_failure"
+      ]
+    },
+    {
+      "test_id": "PROD-REG-006",
+      "source_event_id": "DEGRADED-007",
+      "severity": "high",
+      "risk_types": [
+        "application_error"
+      ]
+    },
+    {
+      "test_id": "PROD-REG-007",
+      "source_event_id": "DEGRADED-010",
+      "severity": "high",
+      "risk_types": [
+        "policy_risk",
+        "role_boundary_semantic_failure"
+      ]
+    }
+  ]
+}
